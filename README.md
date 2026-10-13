@@ -2,7 +2,7 @@
 
 Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado na série Supernatural. Roda direto no navegador, no computador e no celular.
 
-**Jogar:** publicado na Vercel (link no topo do repositório). Também aparece nos projetos do [portfólio do autor](https://github.com/Gabrielsvdata/Portfolio).
+**▶ Jogar:** [winchester-mu.vercel.app](https://winchester-mu.vercel.app/). Também aparece nos projetos do [portfólio do autor](https://github.com/Gabrielsvdata/Portfolio).
 
 ![Tela inicial do jogo](winchester.png)
 
