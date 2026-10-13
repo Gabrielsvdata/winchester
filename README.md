@@ -6,7 +6,7 @@ Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado 
 
 ![Tela inicial do jogo](winchester.png)
 
-> Projeto acadêmico e sem fins lucrativos. Personagens inspirados em *Supernatural*, de Eric Kripke. Sem relação oficial com a série ou com seus donos.
+> Fan game gratuito e não oficial, inspirado em *Supernatural*, de Eric Kripke. Sem relação com a série ou com seus donos. O jogo é de graça; doações no itch.io são opcionais e ajudam a continuar o desenvolvimento.
 
 ## O jogo
 

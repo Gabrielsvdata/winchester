@@ -1329,7 +1329,7 @@ function controlsScreen(){
       <dt>CELULAR</dt><dd>Analógico à esquerda, botões à direita. Empurre até o fim para correr.</dd>
       <dt>CONTROLE</dt><dd>X ataca, A pula, B atira, Y magia, Start pausa.</dd>
     </dl>
-    <p class="fine">Fan game sem fins lucrativos, inspirado em Supernatural, de Eric Kripke. Sem relação oficial com a série.</p>
+    <p class="fine">Fan game gratuito e não oficial, inspirado em Supernatural, de Eric Kripke. Sem relação com a série nem com seus donos. Doações são opcionais e ajudam a continuar o desenvolvimento.</p>
     <div class="row"><button class="btn go" data-act="title">◀ VOLTAR</button></div></div>`);
 }
 function buildLogo(){
@@ -1390,7 +1390,7 @@ function renderTitle(){
     MENU.forEach((m,i)=>{const on=i===titleSel,y=MENU_Y+i*14;text(m.label,160,y,on?'#f2b632':'#9fb6c8',8,'center');
       if(on){const ax=Math.round(160-m.label.length*4-12);c.fillStyle='#f2b632';for(let k=0;k<4;k++)c.fillRect(ax+k,y+k,1,8-k*2);}});
   }
-  text('FAN GAME SEM FINS LUCRATIVOS',160,214,'#5c5874',6,'center',false);
+  text('FAN GAME GRATUITO E NÃO OFICIAL',160,214,'#5c5874',6,'center',false);
 }
 
 /* ============ Abertura: a estrada até aqui ============ */
