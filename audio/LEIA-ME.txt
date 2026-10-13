@@ -1,0 +1,10 @@
+Música da tela inicial
+
+abertura.mp3 é a introdução da tela inicial: uma progressão de acordes
+em Mi menor (Em-D-C-D, Am-G-F-G, Em-G-D-C, final em Bm7) arranjada no
+estilo Mega Drive, com órgão, guitarras FM, baixo e bateria sintetizados.
+Não tem voz, letra nem trechos de gravações existentes.
+
+Ela toca em loop na tela inicial, na abertura e na escolha do caçador.
+Se o arquivo for removido, o jogo volta para a trilha sintetizada em
+tempo real.
