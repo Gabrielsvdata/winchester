@@ -18,10 +18,10 @@ Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado 
 |---|---|---|---|---|
 | 1. A Mulher de Branco | Jericho, Califórnia: estrada na mata, ponte e a casa da Constance | Espíritos | A Mulher de Branco | Dean, Sam |
 | 2. Sangue de Morto | Manning, Colorado: fazenda e celeiro do ninho | Vampiros | Luther, o líder do ninho | + John |
-| 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby, Castiel |
-| 4. O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Todos, com o John como espírito |
+| 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby |
+| 4. O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
 
-Na transição entre capítulos, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, Castiel chega como anjo, e no capítulo final o espírito de John escapa do Portão do Diabo. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
+Na transição entre capítulos, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, e no capítulo final o espírito de John escapa do Portão do Diabo. A história segue a série à risca, sem furos de roteiro: o Castiel, por exemplo, só chega na Parte 2, como na temporada 4. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
 
 O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera os capítulos já alcançados.
 
@@ -35,7 +35,7 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Tiro | Cada caçador tem o seu, com recarga (tabela abaixo) |
 | Magia | Usa os sacos de sal juntados (até 4). Quanto mais sacos, mais forte |
 | Fraquezas | Sal e ferro contra espíritos, lâminas contra vampiros, água benta e lâmina angelical contra demônios |
-| O Colt | No capítulo 4, os golpes só quebram o controle do Azazel. Quando a barra zera, o espírito do John segura o demônio (ou o da Mary, se você estiver jogando com o John) e o TIRO vira o tiro do Colt |
+| O Colt | No capítulo 4, os golpes só quebram o controle do Azazel. Quando a barra zera, o espírito do John segura o demônio e o TIRO vira o tiro do Colt. Jogando com o John, ele mesmo segura e o Dean atira, como na série |
 | Itens | Sacos de sal, torta e hambúrguer, que saem das latas de lixo e dos inimigos |
 | Vidas | 3 vidas e tela de "Continuar?" com contagem regressiva |
 
@@ -47,7 +47,8 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Sam | Atiçador de ferro | Pistola com bala de ferro | Onda psíquica |
 | John | Facão | Rifle que atravessa vários inimigos | Facão giratório |
 | Bobby | Chave de roda | Frascos de água benta, que explodem em área | Armadilha do Diabo: prende demônios e atrasa o resto |
-| Castiel | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
+| Espírito do John (cap. 4) | Toque gelado | Telecinese: arremessa destroços | Fúria poltergeist. Recebe metade do dano físico e às vezes é atravessado pelos golpes, mas não come, sofre mais com ataques sobrenaturais e não segura armas |
+| Castiel (Parte 2) | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
 
 ### Inimigos
 
@@ -114,8 +115,12 @@ Abra o endereço mostrado no terminal. O `index.html` também abre direto no nav
 
 ## Próximos passos
 
-- Fase de estrada com o Impala como montaria.
-- Modo para dois jogadores.
+**Parte 2: O Apocalipse (temporadas 3 a 5)**, em produção:
+
+5. Um Ano: o pacto do Dean, os Sete Pecados, os cães do inferno e Lilith.
+6. Os 66 Selos: Castiel tira o Dean do inferno; Sam mata Lilith e liberta Lúcifer.
+7. Os Cavaleiros: Guerra, Fome, Peste e Morte, e os quatro anéis.
+8. A Jaula: cemitério de Stull, Lúcifer no Sam, Miguel no Adam.
 
 ## Autor
 
