@@ -98,7 +98,7 @@ h2{font-family:var(--f-pixel);font-weight:400;font-size:clamp(14px,3.6vw,20px);l
 <body>
 <div id="app">
   <canvas id="cv" width="320" height="224"></canvas>
-  <div id="topbtns"><button id="sndBtn" type="button">SOM ON</button><button id="pauseBtn" type="button">II</button></div>
+  <div id="topbtns"><button id="sndBtn" type="button">SOM ON</button><button id="pauseBtn" type="button">II</button><button id="skipTut" type="button" hidden>PULAR TREINO</button></div>
   <div id="pad" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
@@ -588,14 +588,52 @@ let traps=[];
 const PROPS=[{x:250,y:160,drop:'salt'},{x:610,y:200,drop:'pie'},{x:960,y:162,drop:'salt'},{x:1290,y:205,drop:'burger'},{x:1440,y:165,drop:'salt'}];
 
 function newEnt(kind,x,y){return{kind,x,y,z:0,vx:0,vy:0,vz:0,face:1,st:'idle',stT:0,t:Math.random()*5,ph:0,hp:1,maxHp:1,flash:0,inv:0,atkCd:rand(.8,1.6),vanCd:rand(5,9),dead:false,alpha:1,set:null};}
+/* ============ Treino ============ */
+let tut=null;
+function tutDone(){try{return localStorage.getItem('winchester-treino')==='1';}catch(e){return false;}}
+const TUT_STEPS=[
+  {t:'ANDE',k:'SETAS OU WASD',m:'ANALÓGICO',d:'Ande para os lados e para cima e baixo.'},
+  {t:'ATAQUE',k:'J',m:'ATACAR',d:'Golpeie com a arma do seu caçador.'},
+  {t:'COMBO',k:'J J J',m:'ATACAR 3 VEZES',d:'Acertando, o terceiro golpe derruba.'},
+  {t:'VOADORA',k:'K E DEPOIS J NO AR',m:'PULO E ATACAR NO AR',d:'Pule e ataque no ar: é a voadora.'},
+  {t:'TIRO',k:'L',m:'TIRO',d:'Cada um tem seu tiro. Ele recarrega.'},
+  {t:'MAGIA',k:'I',m:'MAGIA',d:'Usa os sacos de sal. Mais sal, mais força.'},
+];
+function startTut(){tut={step:0,move:0,presses:[],doneT:0};$('#skipTut').hidden=false;cam.max=0;}
+function endTut(){tut=null;$('#skipTut').hidden=true;try{localStorage.setItem('winchester-treino','1');}catch(e){}cam.max=ZONES[0].x;banner={l1:'BOA CAÇADA!',l2:touchMode?'DICA: EMPURRE ATÉ O FIM = CORRER':'DICA: 2 TOQUES NO LADO = CORRER',t:3,small:true};}
+function updTut(dt,inp){
+  if(!tut)return;
+  if(tut.doneT>0){tut.doneT-=dt;if(tut.doneT<=0){tut.step++;if(tut.step>=TUT_STEPS.length){endTut();}}return;}
+  const p=P;let ok=false;
+  switch(tut.step){
+    case 0:tut.move+=(Math.abs(inp.x)+Math.abs(inp.y))*dt;ok=tut.move>1.2;break;
+    case 1:ok=inp.atk;break;
+    case 2:if(inp.atk){const now=performance.now();tut.presses.push(now);tut.presses=tut.presses.filter(x=>now-x<1300);}ok=tut.presses.length>=3;break;
+    case 3:ok=p.st==='jump'&&p.jatk;break;
+    case 4:ok=p.st==='shoot';break;
+    case 5:ok=p.st==='magic';if(p.magic<1&&p.st!=='magic')p.magic=1;break;
+  }
+  if(ok){tut.doneT=.8;sfx('pick');}
+}
+function drawTut(){
+  if(!tut||(banner&&!banner.small))return;
+  const st=TUT_STEPS[Math.min(tut.step,TUT_STEPS.length-1)],done=tut.doneT>0;
+  px(c,20,40,280,46,'rgba(6,5,12,.86)');c.strokeStyle=done?'#9fe8ff':'#f2b632';c.lineWidth=1;c.strokeRect(20.5,40.5,279,45);
+  text('TREINO '+(tut.step+1)+'/'+TUT_STEPS.length,28,46,'#9fb6c8',6,'left',false);
+  text(done?'BOA!':st.t,292,46,done?'#9fe8ff':'#f2b632',6,'right',false);
+  text((touchMode?st.m:st.k),160,57,'#efe8d6',8,'center');
+  text(st.d,160,72,'#9fb6c8',6,'center',false);
+}
 function startGame(){
   const C=CHAPTERS[chapter];ZONES=C.zones;layers=getLayers(chapter);
   ents=[];props=[];items=[];projs=[];parts=[];saltRings=[];traps=[];score=0;boss=null;
   P=newEnt('player',60,186);P.hp=P.maxHp=100;P.lives=2;P.magic=1;P.shootCd=0;P.combo=0;P.comboT=0;P.queued=false;P.run=false;P.jatk=false;P.face=1;P.inv=1;
   edge.atk=edge.jump=edge.shoot=edge.magic=0;
   cam.x=0;cam.max=ZONES[0].x;zoneIdx=0;zoneOn=false;waveIdx=0;spawnQ=[];goT=0;endT=0;
+  tut=null;$('#skipTut').hidden=true;
   PROPS.forEach((p,i)=>{const e=newEnt('prop',p.x,p.y);e.hp=1;e.drop=C.drops[i]||p.drop;props.push(e);});
   banner={l1:'CAPÍTULO '+chapter,l2:C.place,t:3};
+  if(chapter===1&&!tutDone())startTut();
   mode='play';hideScreen();showPad();playSong('stage');
 }
 
@@ -734,6 +772,7 @@ $('#app').addEventListener('pointerdown',e=>{
   }else if(mode==='intro'){audioOn();advanceIntro();}
 });
 $('#capSkip').addEventListener('click',()=>{if(mode==='intro')endIntro();});
+$('#skipTut').addEventListener('click',()=>{if(tut)endTut();});
 $('#pauseBtn').addEventListener('click',()=>{mode==='play'?pause():mode==='pause'&&resume();});
 $('#sndBtn').addEventListener('click',()=>{audioOn();muted=!muted;$('#sndBtn').textContent=muted?'SOM OFF':'SOM ON';if(titleTrack){if(muted)titleTrack.pause();else if(TITLE_MODES.includes(mode)){titleTrack.currentTime=0;playTrack();}}});
 
@@ -1158,6 +1197,7 @@ function update(dt){
   if(mode!=='play')return;
   if(hitstop>0){hitstop-=dt;return;}
   updPlayer(dt,inp);
+  updTut(dt,inp);
   engageTokens();updTraps(dt);
   for(const e of ents){if(e.dead)continue;if(e.isBoss)updBoss(e,dt);else updEnemy(e,dt);}
   // projéteis
@@ -1296,6 +1336,7 @@ function hud(){
     if(banner.small){text(banner.l1,SW/2,70,'#f2b632',8,'center');if(banner.l2)text(banner.l2,SW/2,82,'#efe8d6',8,'center');}
     else{px(c,0,70,SW,44,'rgba(0,0,0,.6)');text(banner.l1,SW/2,78,'#efe8d6',16,'center');text(banner.l2,SW/2,98,'#f2b632',8,'center');}
     c.globalAlpha=1;}
+  drawTut();
   if(mode==='continue'){px(c,0,0,SW,SH,'rgba(0,0,0,.65)');text('CONTINUAR?',SW/2,80,'#efe8d6',16,'center');text(String(Math.max(0,Math.ceil(contT))),SW/2,108,'#c8392c',24,'center');text(touchMode?'TOQUE EM ATACAR':'APERTE ATACAR',SW/2,146,'#f2b632',8,'center');}
 }
 
@@ -1305,7 +1346,7 @@ function show(html){scr.innerHTML=html;scr.hidden=false;scr.scrollTop=0;const f=
 function hideScreen(){scr.hidden=true;scr.innerHTML='';}
 function showPad(){$('#pad').hidden=!(touchMode&&(mode==='play'||mode==='continue'));layout();}
 let typing=null;
-function typeText(el,full){if(typing)clearInterval(typing);let i=0;el.textContent='';typing=setInterval(()=>{i+=2;el.textContent=full.slice(0,i);if(i>=full.length){clearInterval(typing);typing=null;}},22);el.dataset.full=full;}
+function typeText(el,full){if(typing)clearInterval(typing);let i=0;el.textContent='';typing=setInterval(()=>{i+=1;el.textContent=full.slice(0,i);if(i>=full.length){clearInterval(typing);typing=null;}},26);el.dataset.full=full;}
 /* ============ Tela inicial ============ */
 let titleMenu=false,titleSel=0,logoCv=null,lightT=0,boltX=0,rain=[];
 const flick=new Array(10).fill(0);
@@ -1414,7 +1455,7 @@ function endIntro(){if(typing){clearInterval(typing);typing=null;}$('#cap').hidd
 function updIntro(dt){
   const sc=INTRO[introI];if(!sc)return;
   if(sc.auto){if(introT>sc.auto)nextScene();}
-  else if(!typing){introWait+=dt;if(introWait>4.5)nextScene();}
+  else{const h=$('#capHint');const v=typing?'hidden':'visible';if(h.style.visibility!==v)h.style.visibility=v;}
   for(const q of cut){q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt;}
   cut=cut.filter(q=>q.life>0);if(cut.length>700)cut.splice(0,cut.length-700);
 }
@@ -1559,7 +1600,7 @@ function selectScreen(){
   show(`<div class="box"><p class="eyebrow">CAPITULO ${chapter} · ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint}</p></div>`);
   paintPortraits();
 }
-function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p class="eyebrow">PAUSA</p><h2>Respira, caçador.</h2><div class="row"><button class="btn go" data-act="resume">▶ CONTINUAR</button><button class="btn" data-act="restart">REINICIAR</button><button class="btn" data-act="title">MENU</button></div></div>`);showPad();}
+function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p class="eyebrow">PAUSA</p><h2>Respira, caçador.</h2>${touchMode?`<dl class="keys"><dt>MOVER</dt><dd>Analógico. Empurre até o fim para correr.</dd><dt>ATACAR</dt><dd>3 toques seguidos fazem o combo.</dd><dt>PULO</dt><dd>Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>Recarrega sozinho.</dd><dt>MAGIA</dt><dd>Usa os sacos de sal.</dd></dl>`:`<dl class="keys"><dt>MOVER</dt><dd>Setas ou WASD. Toque duas vezes para o lado para correr.</dd><dt>ATACAR</dt><dd>J ou Z. Três seguidos fazem o combo.</dd><dt>PULAR</dt><dd>K, X ou Espaço. Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>L ou C. Recarrega sozinho.</dd><dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal.</dd></dl>`}<div class="row"><button class="btn go" data-act="resume">▶ CONTINUAR</button><button class="btn" data-act="restart">REINICIAR</button><button class="btn" data-act="title">MENU</button></div></div>`);showPad();}
 function resume(){hideScreen();mode='play';showPad();}
 function gameOverScreen(){mode='over';showPad();show(`<div class="box"><p class="eyebrow">FIM DE JOGO</p><h2>A estrada venceu desta vez.</h2><p class="sub">${CHAPTERS[chapter].over}</p><div class="row"><button class="btn go" data-act="restart">▶ TENTAR DE NOVO</button><button class="btn" data-act="pickagain">TROCAR CAÇADOR</button></div></div>`);}
 function endingScreen(){
