@@ -32,12 +32,18 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Combo | 3 golpes; o terceiro derruba |
 | Voadora | Ataque durante o pulo |
 | Corrida e ombrada | Toque duas vezes para o lado e ataque |
+| Especial | Ataque e pulo juntos: golpe giratório que afasta todo mundo em volta, com invencibilidade curta. Custa 5 de vida |
+| Corpo arremessado | Inimigo derrubado voando acerta e derruba quem estiver no caminho |
+| Comandos guardados | Um botão apertado um pouco antes da hora (no fim de um golpe, ao cair do pulo) sai assim que der, sem perder o comando |
+| Virada automática | Atacando parado com inimigo só nas costas, o caçador se vira para ele |
+| Controle no ar | Dá para ajustar a direção durante o pulo |
 | Tiro | Cada caçador tem o seu, com recarga (tabela abaixo) |
 | Magia | Usa os sacos de sal juntados (até 4). Quanto mais sacos, mais forte |
 | Fraquezas | Sal e ferro contra espíritos, lâminas contra vampiros, água benta e lâmina angelical contra demônios |
 | O Colt | No capítulo 4, os golpes só quebram o controle do Azazel. Quando a barra zera, o espírito do John segura o demônio e o TIRO vira o tiro do Colt. Jogando com o John, ele mesmo segura e o Dean atira, como na série |
 | Itens | Sacos de sal, torta e hambúrguer, que saem das latas de lixo e dos inimigos |
 | Vidas | 3 vidas e tela de "Continuar?" com contagem regressiva |
+| Interface | Barra de vida do último inimigo atingido, contador de golpes seguidos com bônus a partir de 5, barra de recarga do tiro e aviso de vida baixa com borda vermelha e batimento |
 
 ### Caçadores
 
@@ -70,6 +76,7 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Pular | K, X ou Espaço | PULO | A |
 | Tiro | L ou C | TIRO | B |
 | Magia | I ou V | MAGIA | Y |
+| Especial | J + K juntos | ATACAR + PULO | X + A |
 | Pausa | Esc ou P | Botão II | Start |
 
 ## Como foi feito
@@ -77,7 +84,9 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 Tudo em um único arquivo HTML, sem engine, sem bibliotecas e sem imagens.
 
 - **Gráficos:** HTML5 Canvas em 320×224, a resolução do Mega Drive, ampliado sem suavização. Os personagens são bonecos com esqueleto (quadril, joelhos, ombros, cotovelos) desenhados pixel a pixel a cada quadro, com contorno, rotação ao cair e efeito de falha nos fantasmas.
-- **Cenário:** 4 fases com camadas de parallax geradas por código: estrada e ponte de Jericho, fazenda e celeiro sob lua vermelha, pilhas de carros do ferro-velho e o cemitério com o Portão do Diabo.
+- **Cenário:** 4 fases com camadas de parallax geradas por código: estrada e ponte de Jericho, fazenda e celeiro sob lua vermelha, pilhas de carros do ferro-velho e o cemitério com o Portão do Diabo. Cada fase tem seu clima: chuva em Jericho, vaga-lumes na fazenda, cinzas no ferro-velho e brasas saindo do Portão.
+- **Efeitos:** rastro nos golpes rápidos, poeira ao correr e cair, anel de impacto nos golpes que derrubam.
+- **Motor:** a lógica roda em passo fixo de 60 por segundo, então o jogo tem a mesma velocidade em telas de 60, 120 ou 144 Hz.
 - **Combate:** máquina de estados por personagem, caixas de acerto com profundidade (eixo y) e altura (eixo z), pausa no impacto, quique ao cair e um sistema que limita quantos inimigos atacam ao mesmo tempo.
 - **Áudio:** Web Audio API. Efeitos e música da fase são sintetizados em tempo real, com onda de pulso no estilo NES e Mega Drive. A introdução da tela inicial (`audio/abertura.mp3`) é uma progressão de acordes arranjada no estilo YM2612: guitarras FM com saturação, órgão por síntese aditiva, baixo com estalo e bateria no estilo do canal DAC.
 - **Entrada:** teclado, toque (analógico e botões) e Gamepad API.
