@@ -257,7 +257,7 @@ function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p 
 function resume(){hideScreen();mode='play';showPad();}
 function gameOverScreen(){mode='over';showPad();show(`<div class="box"><p class="eyebrow">FIM DE JOGO</p><h2>A estrada venceu desta vez.</h2><p class="sub">${CHAPTERS[chapter].over}</p><div class="row"><button class="btn go" data-act="restart">▶ TENTAR DE NOVO</button><button class="btn" data-act="pickagain">TROCAR CAÇADOR</button></div></div>`);}
 function endingScreen(){
-  mode='ending';showPad();const C=CHAPTERS[chapter],last=chapter===4;saveProgress(chapter+1);
+  mode='ending';showPad();const C=CHAPTERS[chapter],last=chapter===CHAPTERS.length-1;saveProgress(chapter+1);
   const btns=last?`<button class="btn go" data-act="chap" data-n="1" type="button">▶ JOGAR DE NOVO</button><button class="btn" data-act="title" type="button">MENU</button>`
     :`<button class="btn go" data-act="next" type="button">▶ ${arcOf(chapter+1)!==arcOf(chapter)?'CAPITULO '+arcOf(chapter+1):'FASE '+phaseOf(chapter+1)}</button><button class="btn" data-act="restart" type="button">JOGAR DE NOVO</button>`;
   show(`<div class="box"><p class="eyebrow">${last?'WINCHESTER · FIM DO CAPITULO 2':(phaseOf(chapter)===ARCS[arcOf(chapter)].stages.length?'FIM DO CAPITULO '+arcOf(chapter):'FIM DA FASE '+phaseOf(chapter))}</p><h2>${C.outro.h}</h2>

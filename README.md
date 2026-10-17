@@ -19,7 +19,8 @@ Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado 
 | 1. O Negócio da Família (temporada 1) | 1. A Mulher de Branco | Jericho, Califórnia: estrada na mata, ponte e a casa da Constance | Espíritos | A Mulher de Branco | Dean, Sam |
 | | 2. Sangue de Morto | Manning, Colorado: fazenda e celeiro do ninho | Vampiros | Luther, o líder do ninho | + John |
 | | 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby |
-| 2. O Portão do Diabo (temporada 2) | O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
+| 2. O Portão do Diabo (temporada 2) | 1. Cold Oak | Cidade fantasma em Dakota do Sul: fachadas de madeira, igreja e a escola | Acheri, demônios, e Ava como minichefe | Jake, o soldado com força sobre-humana | Sam, Dean, Bobby |
+| | 2. O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
 
 Na transição entre fases, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, e no Portão do Diabo o espírito de John escapa do inferno. A história segue a série à risca, sem furos de roteiro: o Castiel, por exemplo, só chega no capítulo 4, como na temporada 4. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
 
@@ -61,6 +62,9 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 - **Espíritos das vítimas:** somem com efeito de falha na imagem e reaparecem atrás do jogador.
 - **Espíritos que gritam:** atacam de longe com ondas de som que precisam ser puladas.
 - **Vampiros:** caem do teto do celeiro, dão bote em linha reta e regeneram.
+- **Acheri:** demônios com cara de criança, que somem e reaparecem atrás do jogador. Ava controla todos eles.
+- **Ava (minichefe):** fica longe, chama Acheri e se teletransporta quando o jogador chega perto.
+- **Jake:** soca o chão e solta ondas de choque que precisam ser puladas, arremessa pedras, dá investidas e fica mais rápido na metade da vida.
 - **Demônios de olhos negros:** saem da fumaça, lutam de perto e arremessam fumaça negra de longe.
 - **A Mulher de Branco:** investida, grito duplo, teletransporte e invocação de vítimas.
 - **Luther:** botes em sequência e chamada de reforços do ninho.
@@ -139,7 +143,7 @@ O jogo vai cobrir a série inteira com 8 capítulos jogáveis, escolhidos entre 
 | | Tipo | Temporadas | Conteúdo |
 |---|---|---|---|
 | 1. O Negócio da Família | Jogável (pronto) | 1 | Mulher de Branco, o ninho de vampiros e Meg |
-| 2. O Portão do Diabo | Jogável (pronto, ganha mais uma fase) | 2 | Cold Oak, o pacto do Dean e Azazel |
+| 2. O Portão do Diabo | Jogável (pronto) | 2 | Cold Oak, o pacto do Dean e Azazel |
 | 3. Um Ano | Jogável | 3 | O pacto do Dean, Lilith e os cães do inferno |
 | 4. Os Selos | Jogável | 4 | Castiel tira o Dean do inferno; Chuck aparece como profeta; Lúcifer se levanta |
 | 5. A Jaula | Jogável | 5 | Os Cavaleiros e o cemitério de Stull: Sam cai na Jaula com Lúcifer e Miguel |

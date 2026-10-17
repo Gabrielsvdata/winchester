@@ -66,7 +66,7 @@ function impala(g,x,y){
   for(const wx of[x+22,x+88]){disc(g,wx,y+22,6,'#060608');disc(g,wx,y+22,2,'#8a8a92');}
 }
 
-/* ============ Cenários dos capítulos 2 a 4 ============ */
+/* ============ Cenários das fases 2 a 5 ============ */
 function speckOn(g,R,x0,x1,y0,y1,cols,n){for(let i=0;i<n;i++){g.fillStyle=cols[(R()*cols.length)|0];g.fillRect(Math.round(x0+R()*(x1-x0)),Math.round(y0+R()*(y1-y0)),1+(R()*2|0),1);}}
 function pineOn(g,x,base,h,col){for(let y=0;y<h;y++){const w=Math.round((y/h)*h*.32)+1;g.fillStyle=col;g.fillRect(x-w,base-h+y,w*2+1,1);}g.fillRect(x-1,base,3,4);}
 function deadTree(g,x,base,h,col,R){g.fillStyle=col;g.fillRect(x-1,base-h,3,h);for(let i=0;i<5;i++){const y=base-h+R()*h*.7,len=6+R()*14,d=R()<.5?-1:1;for(let k=0;k<len;k++)g.fillRect(Math.round(x+d*k),Math.round(y-k*.6),1,1);}}
@@ -125,7 +125,52 @@ const STAGE_THEMES={
       for(const tx of[240,700,1050,1400,1700]){for(let k=0;k<3;k++){disc(g,tx,22-k*4,6,'#0e0e0e');disc(g,tx,22-k*4,2,'#2a2a2a');}}
       g.strokeStyle='rgba(150,30,20,.6)';g.lineWidth=1;g.beginPath();g.ellipse(120,70,30,10,0,0,Math.PI*2);g.stroke();
     }},
-  4:{ // cemitério em Wyoming, com o Portão do Diabo
+  4:{ // Cold Oak: cidade fantasma em Dakota do Sul
+    sky:['#0c0c12','#121218','#18181e','#1e1c22','#262226','#2e2a28'],stars:30,moon:[260,34,'#b8b0a0','#d0c8b4'],cloud:'#222026',clouds:7,
+    far:'#16161c',farH:x=>110+Math.sin(x*.008)*3+Math.sin(x*.031)*2,
+    mid:(m,W,R)=>{
+      const wood=['#2a221c','#30261e','#262020','#2c2420'];
+      // fachadas falsas de velho oeste ao longo da rua
+      for(let x=0;x<W;x+=58+R()*30){
+        if(x>520&&x<640)continue;
+        const w=40+R()*26|0,h=42+R()*26|0,top=142-h,c0=wood[(R()*wood.length)|0];
+        m.fillStyle=c0;m.fillRect(x,top,w,h);
+        m.fillStyle='rgba(0,0,0,.25)';for(let k=4;k<w;k+=5)m.fillRect(x+k,top+8,1,h-8);
+        m.fillStyle='#1a1612';m.fillRect(x-2,top,w+4,3);
+        m.fillRect(x-3,top+h-20,w+6,2);for(let k=0;k<w;k+=12)m.fillRect(x+k,top+h-18,2,18);
+        for(let k=0;k<2;k++){const wx=x+6+k*(w-18);m.fillStyle=R()<.15?'#5a4a20':'#0c0a0a';m.fillRect(wx,top+12,10,10);m.fillStyle='#1a1612';m.fillRect(wx+4,top+12,2,10);}
+        m.fillStyle='#0a0808';m.fillRect(x+w/2-5|0,top+h-16,10,16);
+        if(R()<.4){m.fillStyle='#3a2e22';m.fillRect(x+4,top+3,w-8,6);m.fillStyle='#4a3e2e';m.fillRect(x+6,top+5,w-12,1);}
+      }
+      // igreja com torre
+      const C=560;m.fillStyle='#24201e';m.fillRect(C,82,70,60);
+      for(let y=0;y<22;y++){const w=Math.round(38-y*1.7);m.fillStyle='#1c1816';m.fillRect(C+35-w,82-y,w*2,1);}
+      m.fillStyle='#24201e';m.fillRect(C+28,30,14,40);for(let y=0;y<14;y++){m.fillStyle='#1c1816';m.fillRect(C+35-Math.round(7-y*.5),16+y,Math.round((7-y*.5)*2)+1,1);}
+      m.fillStyle='#3a3430';m.fillRect(C+34,4,2,12);m.fillRect(C+31,7,8,2);
+      m.fillStyle='#0a0808';m.fillRect(C+31,40,8,10);m.fillRect(C+28,110,14,32);
+      // escola, no fim da rua
+      const E=W-150;m.fillStyle='#2e2420';m.fillRect(E,90,90,52);for(let y=0;y<18;y++){m.fillStyle='#221c18';m.fillRect(E+45-Math.round(50-y*2.6),90-y,Math.round((50-y*2.6)*2),1);}
+      m.fillStyle='#1a1612';m.fillRect(E+38,58,14,16);m.fillStyle='#6a5a30';m.fillRect(E+42,62,6,6);
+      m.fillStyle='#4a3a1c';m.fillRect(E+12,104,12,12);m.fillRect(E+66,104,12,12);m.fillStyle='#0a0808';m.fillRect(E+38,112,14,30);
+      // poste de telégrafo
+      for(let x=30;x<W;x+=180){m.fillStyle='#1a1614';m.fillRect(x,60,2,82);m.fillRect(x-6,64,14,2);}
+    },
+    ground:(g,R)=>{
+      // calçada de tábuas
+      g.fillStyle='#2a2018';g.fillRect(0,0,STAGE_W,30);
+      for(let x=0;x<STAGE_W;x+=4){g.fillStyle=((x/4)|0)%3?'#32261c':'#2a2018';g.fillRect(x,2,3,24);if(R()<.08){g.fillStyle='#14100c';g.fillRect(x,4+(R()*18|0),3,3);}}
+      g.fillStyle='#1a140e';g.fillRect(0,26,STAGE_W,3);for(let x=0;x<STAGE_W;x+=40)g.fillRect(x,0,3,30);
+      // rua de terra
+      g.fillStyle='#3a3026';g.fillRect(0,30,STAGE_W,74);speckOn(g,R,0,STAGE_W,30,104,['#443a2e','#30281e','#4a3e30','#2a2218'],5200);
+      for(let x=0;x<STAGE_W;x+=3){if(R()<.6){g.fillStyle='#2e261c';g.fillRect(x,56+(R()*2|0),3,1);g.fillRect(x,84+(R()*2|0),3,1);}}
+      // barris, caixotes e um poço
+      for(const bx of[160,520,980,1340,1660]){g.fillStyle='#3a2a1a';g.fillRect(bx,10,12,16);g.fillStyle='#4a3622';g.fillRect(bx,10,12,2);g.fillStyle='#1a140e';g.fillRect(bx,15,12,1);g.fillRect(bx,21,12,1);}
+      for(const cx of[300,760,1220]){g.fillStyle='#4a3a26';g.fillRect(cx,12,14,14);g.fillStyle='#2a2016';g.fillRect(cx,12,14,1);g.fillRect(cx,12,1,14);g.fillRect(cx+13,12,1,14);for(let k=0;k<14;k++)g.fillRect(cx+k,12+k,1,1);}
+      const W0=1480;g.fillStyle='#4a4440';g.fillRect(W0,48,24,10);g.fillStyle='#0a0808';g.fillRect(W0+3,48,18,3);g.fillStyle='#2a2018';g.fillRect(W0+1,36,2,12);g.fillRect(W0+21,36,2,12);g.fillRect(W0,35,24,2);
+      // arbustos secos rolando
+      for(let i=0;i<10;i++){const x=R()*STAGE_W,y=40+R()*56;g.fillStyle='#5a4a30';for(let k=0;k<12;k++)g.fillRect(Math.round(x+Math.cos(k)*4),Math.round(y+Math.sin(k*1.7)*3),1,1);}
+    }},
+  5:{ // cemitério em Wyoming, com o Portão do Diabo
     sky:['#06080e','#0a0c16','#0e101c','#141420','#1c1a22','#2a2418'],stars:80,moon:[70,36,'#c8b868','#e0d490'],cloud:'#141420',clouds:4,
     far:'#0e1016',farH:x=>104+Math.sin(x*.01)*4,
     mid:(m,W,R)=>{

@@ -49,6 +49,9 @@ const LOOKS={
   azazel:{skin:'#d8ac88',hair:'#5a5550',style:'short',jacket:'#4a5a78',jacketD:'#34405a',shirt:'#8a8270',pants:'#2e3648',pantsD:'#1e2432',boots:'#1a1410',eye:'#ffd400',tall:4},
   woman:{skin:'#e2ecf2',hair:'#0a0a12',style:'woman',dress:'#f0f4f8',dressD:'#a8b4c2',jacket:'#e6ecf2',jacketD:'#b0bcc8',shirt:'#f8fbfc',eye:'#000',skirt:true,tall:5,boots:'#000'},
 };
+LOOKS.jake={skin:'#7a5034',hair:'#141010',style:'short',jacket:'#4a5232',jacketD:'#343a22',shirt:'#6a6a50',pants:'#3a3e2a',pantsD:'#282c1c',boots:'#1a1410',tall:4};
+LOOKS.ava={skin:'#ecc4a4',hair:'#2a1a12',style:'woman',jacket:'#5a3a5a',jacketD:'#3c263c',shirt:'#a07890',pants:'#2a2a3a',pantsD:'#1c1c28',boots:'#141014',tall:0};
+const ACHERI={skin:'#e4cfc4',hair:'#3a2a1a',style:'woman',jacket:'#b8a8b8',jacketD:'#8a7a8a',shirt:'#d8c8d8',dress:'#b8a8b8',dressD:'#8a7a8a',skirt:true,eye:'#000',boots:'#2a2020',tall:-8};
 const GHOSTS=[
   {skin:'#b6ccd8',hair:'#334454',style:'short',jacket:'#566a80',jacketD:'#3c4c5e',shirt:'#90a4b4',pants:'#3a4656',pantsD:'#283240',boots:'#1a2230',eye:'#000'},
   {skin:'#bcd0d8',hair:'#2a3038',style:'short',jacket:'#6a5c7c',jacketD:'#483e58',plaid:'#3a304a',shirt:'#a0a8b8',pants:'#3a4250',pantsD:'#262e3a',boots:'#161c26',eye:'#000',tall:2},
@@ -133,6 +136,8 @@ function poseFor(e){
     case 'windup':P.fa=[-.9,.9];P.ba=[-.5,.6];P.lean=-2;P.claw=true;P.weapon=false;break;
     case 'eatk':P.fa=[1.5,.05];P.ba=[1.2,.3];P.lean=3;P.claw=true;P.weapon=false;break;
     case 'recover':P.fa=[.9,.4];P.lean=1;P.weapon=false;break;
+    case 'jwind':P.fa=[2.9,.2];P.ba=[2.7,.2];P.lean=-2;P.crouch=k>.4?2:0;P.weapon=false;break;
+    case 'summon':P.fa=[2.6,.4];P.ba=[2.4,.4];P.lean=-1;P.weapon=false;break;
     case 'scream':case 'swind':P.fa=[2.3,.5];P.ba=[2.1,.5];P.lean=-2;P.mouth=k>.25;P.weapon=false;break;
     case 'cwind':P.fa=[1.3,.2];P.ba=[1.1,.3];P.lean=-3;P.claw=true;break;
     case 'charge':P.fa=[1.6,0];P.ba=[1.4,.1];P.lean=5;P.claw=true;P.mouth=true;break;

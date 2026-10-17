@@ -5,11 +5,11 @@ let P=null,ents=[],props=[],items=[],projs=[],parts=[];
 let cam={x:0,max:0},zoneIdx=0,zoneOn=false,waveIdx=0,spawnQ=[],spawnT=0;
 let saltRings=[];
 let amb=[],lastFoe=null,chain=0,chainT=0,beatT=0;
-const FOE_NAME={v:'ESPÍRITO',g:'ESPÍRITO QUE GRITA',vp:'VAMPIRO',dm:'DEMÔNIO'};
+const FOE_NAME={v:'ESPÍRITO',g:'ESPÍRITO QUE GRITA',vp:'VAMPIRO',dm:'DEMÔNIO',ac:'ACHERI',ava:'AVA'};
 let hitstop=0,shake=0,flash=0,banner=null,goT=0,score=0,boss=null,dimT=0,saltRain=0,endT=0;
-function isSpirit(){return hero==='john'&&chapter===4;}
-function heroFor(id){return id==='john'&&chapter===4?HEROES.johnSpirit:HEROES[id];}
-function lookFor(id){return id==='john'&&chapter===4?LOOKS.johnSpirit:LOOKS[id];}
+function isSpirit(){return hero==='john'&&chapter===5;}
+function heroFor(id){return id==='john'&&chapter===5?HEROES.johnSpirit:HEROES[id];}
+function lookFor(id){return id==='john'&&chapter===5?LOOKS.johnSpirit:LOOKS[id];}
 const HEROES={
   dean:{name:'DEAN',reach:[24,26,24],dmg:[7,8,13],spd:60,shootCd:2.6,magicName:'CÍRCULO DE SAL',gunName:'Espingarda de sal grosso',wName:'Pé de cabra de ferro',tag:'iron',stats:{forca:5,vel:3,tiro:5,magia:4}},
   sam:{name:'SAM',reach:[27,29,26],dmg:[6,7,12],spd:68,shootCd:1.8,magicName:'ONDA PSÍQUICA',gunName:'Pistola com bala de ferro',wName:'Atiçador de ferro',tag:'iron',stats:{forca:4,vel:5,tiro:3,magia:5}},
@@ -78,13 +78,13 @@ function startGame(){
 
 /* ============ Capítulos ============ */
 let chapter=1,progress=1;
-try{progress=Math.max(1,Math.min(4,parseInt(localStorage.getItem('winchester-progresso'),10)||1));}catch(e){}
-function saveProgress(n){progress=Math.max(progress,Math.min(4,n));try{localStorage.setItem('winchester-progresso',String(progress));}catch(e){}}
+try{progress=Math.max(1,Math.min(5,parseInt(localStorage.getItem('winchester-progresso'),10)||1));}catch(e){}
+function saveProgress(n){progress=Math.max(progress,Math.min(CHAPTERS.length-1,n));try{localStorage.setItem('winchester-progresso',String(progress));}catch(e){}}
 const BOSS_ZONE={x:STAGE_W-SW,boss:true};
 // Capítulos (um por temporada) e suas fases. 'chapter' guarda o número da fase.
 const ARCS=[null,
   {title:'O NEGÓCIO DA FAMÍLIA',season:'TEMPORADA 1',stages:[1,2,3]},
-  {title:'O PORTÃO DO DIABO',season:'TEMPORADA 2',stages:[4],
+  {title:'O PORTÃO DO DIABO',season:'TEMPORADA 2',stages:[4,5],
     intro:'John está morto. O pacto que ele fez com o Olho Amarelo trouxe Dean de volta, e os irmãos passam o ano caçando sem o pai, com a ajuda de Bobby e de Ellen, dona da Roadhouse. Até que o demônio dá o próximo passo do plano dele.'},
 ];
 const arcOf=n=>ARCS.findIndex(a=>a&&a.stages.includes(n));
@@ -115,11 +115,19 @@ const CHAPTERS=[null,
     hint:'Bobby entra na equipe. Água benta é mortal para demônios, e a armadilha dele os prende no lugar.',
     over:'Dica: a Armadilha do Diabo do Bobby prende os demônios no lugar. Use antes de cercarem você.',
     outro:{h:'O pacto',t:'Meg é exorcizada, e os irmãos resgatam John. Mas o Olho Amarelo possui o pai, e Sam atira na perna dele com o Colt para salvá-lo. O demônio escapa. Na estrada, um caminhão guiado por outro demônio atinge o Impala. Dean fica entre a vida e a morte, e John chama o Olho Amarelo para um pacto: a própria alma e o Colt pela vida do filho. Dean acorda no hospital. John não.'}},
+  {title:'COLD OAK',place:'CIDADE FANTASMA, DAKOTA DO SUL',heroes:['sam','dean','bobby'],boss:'jake',
+    zones:[{x:80,waves:[['ac','ac']]},{x:400,waves:[['ac','ac','ac'],['ac','dm']]},{x:770,waves:[['ava','ac'],['ac','ac','dm']]},{x:1120,waves:[['ac','dm','ac','ac'],['dm','ac','dm']]},BOSS_ZONE],
+    drops:['salt','burger','salt','pie','salt'],
+    intro:'Sam some de uma lanchonete enquanto Dean busca a comida, e acorda numa cidade fantasma em Dakota do Sul. Ele não está sozinho: o Olho Amarelo juntou ali as crianças especiais, os jovens que visitou quando eram bebês, para lutarem até sobrar um. Ava, sumida há meses, aprendeu a controlar demônios. Jake, um soldado, ganhou força sobre-humana. Dean e Bobby correm para achar Sam antes que seja tarde.',
+    tip:'Os Acheri são demônios com cara de criança: somem e aparecem atrás de você. Ava controla todos eles. Jake tem força sobre-humana: quando ele levantar os braços, pule a onda de choque.',
+    hint:'A primeira caçada sem o John. Água benta funciona nos Acheri, e a Armadilha do Diabo do Bobby prende eles.',
+    over:'Dica: quando Jake levanta os braços, ele vai socar o chão. Pule a onda de choque.',
+    outro:{h:'Cold Oak',t:'Jake cai, e Sam decide poupar a vida dele. Dean e Bobby chegam à rua principal e veem Sam de longe. Então Jake se levanta e crava uma faca nas costas de Sam. Sam morre nos braços do irmão, enquanto Jake some na noite como o último que sobrou.'}},
   {title:'O PORTÃO DO DIABO',place:'CEMITÉRIO ABANDONADO, WYOMING',heroes:['dean','sam','bobby','john'],boss:'azazel',
     newcomers:[{id:'john',label:'O ESPÍRITO DE JOHN',why:'Com o portão aberto, não são só demônios que escapam do inferno: almas também. Uma delas é a de John, que vem lutar ao lado dos filhos uma última vez. Como espírito, ele sente menos os golpes e às vezes é atravessado por eles. Mas não come, sofre mais com ataques sobrenaturais e não consegue segurar armas.'}],
     zones:[{x:80,waves:[['dm','dm','dm']]},{x:400,waves:[['dm','vp','dm'],['v','dm','dm']]},{x:770,waves:[['dm','dm','dm','vp'],['dm','g','dm']]},{x:1120,waves:[['dm','dm','vp','vp'],['dm','dm','dm','dm']]},BOSS_ZONE],
     drops:['salt','pie','salt','salt','burger'],
-    intro:'Um ano depois, o Olho Amarelo reúne as crianças especiais numa cidade fantasma para lutarem até sobrar uma. Sam é esfaqueado pelas costas por Jake e morre nos braços de Dean. Dean vai até uma encruzilhada e faz um pacto: Sam volta à vida, e ele ganha só um ano antes de ir para o inferno. Em Wyoming, Jake usa o Colt para abrir o Portão do Diabo, num cemitério cercado por uma linha de ferro feita por Samuel Colt. Centenas de demônios escapam.',
+    intro:'Dean não aceita perder o irmão. Vai até uma encruzilhada e faz um pacto: Sam volta à vida, e ele ganha só um ano antes de ir para o inferno. Em Wyoming, Jake usa o Colt para abrir o Portão do Diabo, num cemitério cercado por uma linha de ferro feita por Samuel Colt. Centenas de demônios escapam.',
     tip:'Azazel não sente dano comum: seus golpes só quebram o controle dele. Quando a barra zerar, o espírito do John segura o demônio. Aí aperte TIRO para atirar com o Colt.',
     hint:'Batalha final da temporada 2. O espírito do John joga com regras próprias: leia a ficha dele antes de escolher.',
     over:'Dica: quando Azazel aponta, um círculo amarelo aparece no chão. Saia dele antes que feche.',
@@ -128,7 +136,7 @@ const CHAPTERS=[null,
 function heroCards(C){
   const isNew=id=>(C.newcomers||[]).some(n=>n.id===id);
   return C.heroes.map(id=>{const H=heroFor(id),st=H.stats,nw=isNew(id);
-    const nm=id==='john'&&chapter===4?'JOHN (ESPÍRITO)':H.name;
+    const nm=id==='john'&&chapter===5?'JOHN (ESPÍRITO)':H.name;
     return`<button class="card${nw?' isnew':''}" data-act="pick" data-id="${id}" type="button"><canvas width="72" height="72" data-pv="${id}"></canvas><div class="info">${nw?'<span class="tag">NOVO</span>':''}<div class="nm">${nm}</div>
     <div class="stat">Força <i style="--v:${st.forca}"></i></div><div class="stat">Velocidade <i style="--v:${st.vel}"></i></div><div class="stat">Tiro <i style="--v:${st.tiro}"></i></div><div class="stat">Magia <i style="--v:${st.magia}"></i></div>
     <div class="ln">Arma: <b>${H.wName}</b></div><div class="ln">Tiro: <b>${H.gunName}</b></div><div class="ln">Magia: <b>${H.magicName.toLowerCase().replace(/^./,m=>m.toUpperCase())}</b></div>${H.note?`<div class="ln">${H.note}</div>`:''}</div></button>`;}).join('');
@@ -136,7 +144,7 @@ function heroCards(C){
 function paintPortraits(){
   document.querySelectorAll('[data-pv]').forEach(cv2=>{const g=cv2.getContext('2d');g.imageSmoothingEnabled=false;g.clearRect(0,0,72,72);
     drawPuppet(bg,lookFor(cv2.dataset.pv),{lean:0,crouch:0,fl:[.3,.1],bl:[-.3,.1],fa:[.5,.9],ba:[-.3,.4]});
-    silhouette(sg,cv2.dataset.pv==='john'&&chapter===4?'#9fd8ff':'#07060d');for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1]])g.drawImage(sil,dx,dy);g.drawImage(buf,0,0);});
+    silhouette(sg,cv2.dataset.pv==='john'&&chapter===5?'#9fd8ff':'#07060d');for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1]])g.drawImage(sil,dx,dy);g.drawImage(buf,0,0);});
 }
 function chapterIntro(n){
   chapter=n;layers=getLayers(n);
