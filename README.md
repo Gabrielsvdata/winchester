@@ -12,17 +12,27 @@ Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado 
 
 1. **Tela inicial:** o Impala na estrada à noite, com chuva, relâmpagos e o logo piscando como luz com mau contato.
 2. **Abertura "A estrada até aqui":** 6 cenas animadas contam a origem dos Winchester: o incêndio de 1983 em Lawrence, os olhos amarelos, a vida na estrada, Stanford e a pista de Jericho.
-3. **Capítulos por temporada, divididos em fases**, cada fase com história antes e depois, escolha de caçador, cenário próprio e chefe:
+3. **8 capítulos jogáveis, um por temporada marcante**, divididos em fases. Cada capítulo abre com cenas animadas, e cada fase tem história antes e depois, escolha de caçador, cenário próprio e chefe. As temporadas que não viraram fase (6 a 8 e 12 a 14) são contadas em cenas entre os capítulos, para a história não ter buracos.
 
-| Capítulo | Fase | Lugar | Inimigos | Chefe | Caçadores |
-|---|---|---|---|---|---|
-| 1. O Negócio da Família (temporada 1) | 1. A Mulher de Branco | Jericho, Califórnia: estrada na mata, ponte e a casa da Constance | Espíritos | A Mulher de Branco | Dean, Sam |
-| | 2. Sangue de Morto | Manning, Colorado: fazenda e celeiro do ninho | Vampiros | Luther, o líder do ninho | + John |
-| | 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby |
-| 2. O Portão do Diabo (temporada 2) | 1. Cold Oak | Cidade fantasma em Dakota do Sul: fachadas de madeira, igreja e a escola | Acheri, demônios, e Ava como minichefe | Jake, o soldado com força sobre-humana | Sam, Dean, Bobby |
-| | 2. O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
+| Capítulo | Fases e chefes | Caçadores |
+|---|---|---|
+| 1. O Negócio da Família (temporada 1) | A Mulher de Branco; Sangue de Morto (Luther); Olhos Negros (Meg) | Dean, Sam, John, Bobby |
+| 2. O Portão do Diabo (temporada 2) | Cold Oak (Ava e Jake); O Portão do Diabo (Azazel e o Colt) | Sam, Dean, Bobby, espírito do John |
+| 3. Um Ano (temporada 3) | Os Sete Pecados (Orgulho); Sem Descanso (Lilith e os cães do inferno) | + Ruby |
+| 4. Os Selos (temporada 4) | Lázaro (Alastair); O Último Selo (Lilith) | + Castiel; Sam com sangue de demônio |
+| 5. A Jaula (temporada 5) | Guerra (o Cavaleiro); A Jaula (Lúcifer em Stull) | + Ellen e Jo; só o Dean em Stull |
+| Interlúdio | Temporadas 6 a 8: Sam sem alma, Castiel Deus, Leviatãs, Purgatório, a queda dos anjos | |
+| 6. A Marca de Caim (temporadas 9 e 10) | A Primeira Lâmina (Abaddon) | + Crowley; Dean com a Marca |
+| 7. A Escuridão (temporada 11) | O Diabo no Anjo (Lúcifer em Castiel); A Escuridão (Amara) | Dean, Sam, Crowley, Castiel |
+| Interlúdio | Temporadas 12 a 14: Mary volta, Jack nasce, Chuck abre o inferno | |
+| 8. O Autor (temporada 15) | O Autor (Chuck) | + Jack |
 
-Na transição entre fases, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, e no Portão do Diabo o espírito de John escapa do inferno. A história segue a série à risca, sem furos de roteiro: o Castiel, por exemplo, só chega no capítulo 4, como na temporada 4. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
+**O final.** Na luta contra Chuck, ele reescreve o jogo: traz chefes antigos de volta, inverte os controles e escreve FIM na tela, e o jogador precisa quebrar as letras. No fim, Chuck oferece o roteiro que escreveu, e o jogador escolhe:
+
+- **Aceitar o final escrito:** Dean se sacrifica para segurar Chuck, Sam segue a vida com Eileen e o filho, e os irmãos se reencontram na ponte do Céu.
+- **Rasgar o roteiro:** ninguém morre, Jack assume o Céu e traz Castiel de volta do Vazio, Chuck vira só um escritor, e os irmãos envelhecem caçando por escolha, até a Roadhouse do Céu.
+
+Na transição entre fases, cada personagem novo é apresentado com o motivo de entrar na equipe, e a história segue a série: Castiel só chega no capítulo 4, como na temporada 4, e a Ruby troca de corpo entre as temporadas 3 e 4.
 
 O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera os capítulos já alcançados.
 
@@ -55,7 +65,13 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | John | Facão | Rifle que atravessa vários inimigos | Facão giratório |
 | Bobby | Chave de roda | Frascos de água benta, que explodem em área | Armadilha do Diabo: prende demônios e atrasa o resto |
 | Espírito do John (cap. 4) | Toque gelado | Telecinese: arremessa destroços | Fúria poltergeist. Recebe metade do dano físico e às vezes é atravessado pelos golpes, mas não come, sofre mais com ataques sobrenaturais e não segura armas |
-| Castiel (capítulo 4) | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
+| Castiel (a partir do capítulo 4) | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
+| Ruby (capítulos 3 e 4) | Faca que mata demônios | Faca arremessada | Fumaça negra: atravessa a tela ferindo quem estiver no caminho. Como demônia, sofre mais com ataques sobrenaturais de longe |
+| Sam com sangue de demônio (capítulo 4) | Faca da Ruby | Pistola | Poder do sangue: muito mais forte, mas cada uso custa vida |
+| Ellen e Jo (capítulo 5) | Coronha e faca de caça | Espingarda e pistola | Círculo de sal e faca giratória |
+| Dean com a Marca (capítulo 6) | A Primeira Lâmina | Espingarda | Fúria da Marca: dano dobrado e mais velocidade, mas perde vida enquanto dura |
+| Crowley (capítulos 6 e 7) | Lâmina de demônio | Cão do inferno, que atravessa os inimigos | O Contrato: fere todos na tela e devolve vida ao Crowley |
+| Jack (capítulo 8) | Mãos de luz | Raio de graça | Poder nefilim: não precisa de sal, mas cada uso custa vida |
 
 ### Inimigos
 
@@ -65,6 +81,11 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 - **Acheri:** demônios com cara de criança, que somem e reaparecem atrás do jogador. Ava controla todos eles.
 - **Ava (minichefe):** fica longe, chama Acheri e se teletransporta quando o jogador chega perto.
 - **Jake:** soca o chão e solta ondas de choque que precisam ser puladas, arremessa pedras, dá investidas e fica mais rápido na metade da vida.
+- **Cães do inferno:** invisíveis, só aparecem a sombra, os olhos vermelhos e o bafo.
+- **Anjos:** se teletransportam e, quando morrem, deixam a marca das asas queimada no chão.
+- **Moradores de River Pass:** parecem demônios por causa da Guerra, mas são gente: quando caem, aparece "era um morador".
+- **Contaminados pela névoa:** correm em linha reta e não sentem dor.
+- **Chefes novos:** Orgulho, Lilith (duas vezes), Alastair (que escapa da Armadilha do Diabo), a Guerra, Lúcifer em Stull (você não pode vencer, só sobreviver e juntar as três memórias do Sam), Abaddon, Lúcifer no corpo de Castiel, Amara e Chuck.
 - **Demônios de olhos negros:** saem da fumaça, lutam de perto e arremessam fumaça negra de longe.
 - **A Mulher de Branco:** investida, grito duplo, teletransporte e invocação de vítimas.
 - **Luther:** botes em sequência e chamada de reforços do ninho.
@@ -103,11 +124,13 @@ winchester/
 ├── index.html        # página, estilos e ordem dos scripts
 ├── js/
 │   ├── base.js       # constantes, primitivas de pixel, boneco e poses
-│   ├── cenario.js    # cenários de cada fase
+│   ├── cenario.js    # cenários das fases 1 a 5
+│   ├── cenarios2.js  # cenários das fases 6 a 15
 │   ├── audio.js      # efeitos e trilhas
 │   ├── capitulos.js  # estado, treino, capítulos, fases e textos da história
 │   ├── entrada.js    # teclado, toque e controle
 │   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
+│   ├── conteudo.js   # capítulos 3 a 8: personagens, chefes, poderes, cenas e os dois finais
 │   ├── quadro.js     # atualização de cada quadro e desenho da fase
 │   ├── telas.js      # tela inicial, abertura, menus e telas de história
 │   └── main.js       # laço principal
@@ -135,28 +158,6 @@ Abra o endereço mostrado no terminal. O `index.html` também abre direto no nav
 1. Em [vercel.com](https://vercel.com), clique em **Add New → Project** e importe este repositório.
 2. Em **Framework Preset**, deixe **Other**. Não há comando de build: a Vercel publica os arquivos como estão.
 3. Clique em **Deploy**. Cada push na `main` publica uma nova versão.
-
-## Próximos passos
-
-O jogo vai cobrir a série inteira com 8 capítulos jogáveis, escolhidos entre as temporadas mais queridas pelos fãs. As outras temporadas entram como interlúdios: cenas animadas que contam a história entre um capítulo e outro, para não deixar buracos.
-
-| | Tipo | Temporadas | Conteúdo |
-|---|---|---|---|
-| 1. O Negócio da Família | Jogável (pronto) | 1 | Mulher de Branco, o ninho de vampiros e Meg |
-| 2. O Portão do Diabo | Jogável (pronto) | 2 | Cold Oak, o pacto do Dean e Azazel |
-| 3. Um Ano | Jogável | 3 | O pacto do Dean, Lilith e os cães do inferno |
-| 4. Os Selos | Jogável | 4 | Castiel tira o Dean do inferno; Chuck aparece como profeta; Lúcifer se levanta |
-| 5. A Jaula | Jogável | 5 | Os Cavaleiros e o cemitério de Stull: Sam cai na Jaula com Lúcifer e Miguel |
-| Interlúdio | Cenas | 6 a 8 | Sam sem alma, Castiel se declara Deus, Leviatãs, Purgatório, Crowley Rei do Inferno |
-| 6. A Marca de Caim | Jogável | 9 e 10 | Dean com a Marca, Abaddon e Crowley jogável |
-| 7. A Escuridão | Jogável | 11 | Amara e a revelação do Chuck |
-| Interlúdio | Cenas | 12 a 14 | Mary volta, Jack nasce, Miguel do outro mundo |
-| 8. O Autor | Jogável | 15 | Chuck como chefe final e Jack jogável |
-
-**O final.** Na luta final, Chuck reescreve o jogo: traz de volta chefes antigos, inverte os controles e escreve "FIM" na tela. No fim, ele oferece ao Dean o roteiro que escreveu, e o jogador escolhe:
-
-- **Aceitar o final escrito:** Dean se sacrifica para segurar o Chuck, e Sam segue a vida com a Eileen e o filho.
-- **Rasgar o roteiro:** a família vence junta, Jack assume o Céu e traz Castiel de volta do Vazio, e os irmãos só se reencontram na ponte do Céu depois de uma vida inteira.
 
 ## Autor
 

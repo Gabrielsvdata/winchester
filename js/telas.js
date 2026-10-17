@@ -92,21 +92,22 @@ const L_MARY={skin:'#f0c8a0',hair:'#e8c878',style:'woman',jacket:'#f2f0ec',jacke
 const L_JOHN={skin:'#e4b088',hair:'#3a2a1c',style:'short',jacket:'#5a4630',jacketD:'#3a2c1c',shirt:'#8a8478',pants:'#3a4258',pantsD:'#283044',boots:'#1a1410',tall:2};
 const L_KID={skin:'#f0c098',hair:'#d8b060',style:'short',jacket:'#4a6a9a',jacketD:'#34507a',shirt:'#6a8aba',pants:'#4a6a9a',pantsD:'#34507a',boots:'#d8d0c0',tall:-8};
 const L_SHADOW={skin:'#0c0c10',hair:'#050508',style:'short',jacket:'#0c0c12',jacketD:'#060608',shirt:'#101018',pants:'#0a0a10',pantsD:'#060608',boots:'#000',eye:'#ffd400',tall:2};
-let introI=0,introT=0,introWait=0,cut=[];
-function startIntro(){mode='intro';introI=-1;nextScene();}
+let introI=0,introT=0,introWait=0,cut=[],SCN=[],sceneAfter=null;
+function startIntro(){playScenes(INTRO,()=>{chapter=1;selectScreen();});}
+function playScenes(list,after){SCN=list;sceneAfter=after;hideScreen();mode='intro';introI=-1;playSong('title');nextScene();}
 function nextScene(){
-  introI++;if(introI>=INTRO.length){endIntro();return;}
+  introI++;if(introI>=SCN.length){endIntro();return;}
   introT=0;introWait=0;cut=[];
-  const sc=INTRO[introI],cap=$('#cap');
+  const sc=SCN[introI],cap=$('#cap');
   if(sc.sfx)sc.sfx();
   if(sc.text){cap.hidden=false;$('#capPlace').textContent=sc.place;$('#capHint').textContent=touchMode?'TOQUE PARA SEGUIR':'ENTER PARA SEGUIR';typeText($('#capText'),sc.text);}
   else{cap.hidden=true;if(typing){clearInterval(typing);typing=null;}}
   layout();
 }
 function advanceIntro(){if(introT<.3)return;const el=$('#capText');if(typing&&el){clearInterval(typing);typing=null;el.textContent=el.dataset.full;return;}nextScene();}
-function endIntro(){if(typing){clearInterval(typing);typing=null;}$('#cap').hidden=true;chapter=1;selectScreen();}
+function endIntro(){if(typing){clearInterval(typing);typing=null;}$('#cap').hidden=true;const f=sceneAfter;sceneAfter=null;if(f)f();}
 function updIntro(dt){
-  const sc=INTRO[introI];if(!sc)return;
+  const sc=SCN[introI];if(!sc)return;
   if(sc.auto){if(introT>sc.auto)nextScene();}
   else{const h=$('#capHint');const v=typing?'hidden':'visible';if(h.style.visibility!==v)h.style.visibility=v;}
   for(const q of cut){q.x+=q.vx*dt;q.y+=q.vy*dt;q.life-=dt;}
@@ -114,7 +115,7 @@ function updIntro(dt){
 }
 function renderIntro(){
   c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;
-  const sc=INTRO[introI];if(sc)sc.draw(introT);
+  const sc=SCN[introI];if(sc)sc.draw(introT);
   if(introT<.45){c.globalAlpha=1-introT/.45;c.fillStyle='#000';c.fillRect(0,0,SW,SH);c.globalAlpha=1;}
   c.fillStyle='#000';c.fillRect(0,0,SW,8);c.fillRect(0,SH-8,SW,8);
 }
@@ -258,6 +259,7 @@ function resume(){hideScreen();mode='play';showPad();}
 function gameOverScreen(){mode='over';showPad();show(`<div class="box"><p class="eyebrow">FIM DE JOGO</p><h2>A estrada venceu desta vez.</h2><p class="sub">${CHAPTERS[chapter].over}</p><div class="row"><button class="btn go" data-act="restart">▶ TENTAR DE NOVO</button><button class="btn" data-act="pickagain">TROCAR CAÇADOR</button></div></div>`);}
 function endingScreen(){
   mode='ending';showPad();const C=CHAPTERS[chapter],last=chapter===CHAPTERS.length-1;saveProgress(chapter+1);
+  if(C.choice){choiceScreen();return;}
   const btns=last?`<button class="btn go" data-act="chap" data-n="1" type="button">▶ JOGAR DE NOVO</button><button class="btn" data-act="title" type="button">MENU</button>`
     :`<button class="btn go" data-act="next" type="button">▶ ${arcOf(chapter+1)!==arcOf(chapter)?'CAPITULO '+arcOf(chapter+1):'FASE '+phaseOf(chapter+1)}</button><button class="btn" data-act="restart" type="button">JOGAR DE NOVO</button>`;
   show(`<div class="box"><p class="eyebrow">${last?'WINCHESTER · FIM DO CAPITULO 2':(phaseOf(chapter)===ARCS[arcOf(chapter)].stages.length?'FIM DO CAPITULO '+arcOf(chapter):'FIM DA FASE '+phaseOf(chapter))}</p><h2>${C.outro.h}</h2>
@@ -278,6 +280,8 @@ scr.addEventListener('click',e=>{
   else if(a==='title')titleScreen();
   else if(a==='next')chapterIntro(chapter+1);
   else if(a==='chap')chapterIntro(+b.dataset.n);
+  else if(a==='endA')playScenes(ENDING_ACCEPT,()=>creditsScreen('A'));
+  else if(a==='endB')playScenes(ENDING_TEAR,()=>creditsScreen('B'));
 });
 
 /* ============ Layout ============ */

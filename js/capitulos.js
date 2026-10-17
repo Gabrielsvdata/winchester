@@ -8,16 +8,18 @@ let amb=[],lastFoe=null,chain=0,chainT=0,beatT=0;
 const FOE_NAME={v:'ESPÍRITO',g:'ESPÍRITO QUE GRITA',vp:'VAMPIRO',dm:'DEMÔNIO',ac:'ACHERI',ava:'AVA'};
 let hitstop=0,shake=0,flash=0,banner=null,goT=0,score=0,boss=null,dimT=0,saltRain=0,endT=0;
 function isSpirit(){return hero==='john'&&chapter===5;}
-function heroFor(id){return id==='john'&&chapter===5?HEROES.johnSpirit:HEROES[id];}
-function lookFor(id){return id==='john'&&chapter===5?LOOKS.johnSpirit:LOOKS[id];}
+const VARIANT={};
+function heroFor(id){if(id==='john'&&chapter===5)return HEROES.johnSpirit;const v=VARIANT[id]&&VARIANT[id](chapter);return v&&HEROES[v]?HEROES[v]:HEROES[id];}
+const LOOKVAR={};
+function lookFor(id){if(id==='john'&&chapter===5)return LOOKS.johnSpirit;const v=LOOKVAR[id]&&LOOKVAR[id](chapter);return v&&LOOKS[v]?LOOKS[v]:LOOKS[id];}
 const HEROES={
-  dean:{name:'DEAN',reach:[24,26,24],dmg:[7,8,13],spd:60,shootCd:2.6,magicName:'CÍRCULO DE SAL',gunName:'Espingarda de sal grosso',wName:'Pé de cabra de ferro',tag:'iron',stats:{forca:5,vel:3,tiro:5,magia:4}},
-  sam:{name:'SAM',reach:[27,29,26],dmg:[6,7,12],spd:68,shootCd:1.8,magicName:'ONDA PSÍQUICA',gunName:'Pistola com bala de ferro',wName:'Atiçador de ferro',tag:'iron',stats:{forca:4,vel:5,tiro:3,magia:5}},
-  john:{name:'JOHN',reach:[26,28,25],dmg:[8,8,14],spd:58,shootCd:2.2,magicName:'FACÃO GIRATÓRIO',gunName:'Rifle com bala de ferro',wName:'Facão',tag:'machete',stats:{forca:5,vel:3,tiro:4,magia:3}},
-  bobby:{name:'BOBBY',reach:[24,26,24],dmg:[7,8,13],spd:55,shootCd:2,magicName:'ARMADILHA DO DIABO',gunName:'Frascos de água benta',wName:'Chave de roda',tag:'iron',stats:{forca:4,vel:2,tiro:4,magia:5}},
-  johnSpirit:{name:'JOHN',reach:[25,27,25],dmg:[7,8,13],spd:62,shootCd:1.8,magicName:'FÚRIA POLTERGEIST',gunName:'Telecinese: arremessa destroços',wName:'Toque gelado',tag:'psychic',stats:{forca:4,vel:4,tiro:4,magia:4},
+  dean:{name:'DEAN',reach:[24,26,24],dmg:[7,8,13],spd:60,shootCd:2.6,magicName:'CÍRCULO DE SAL',shot:'shotgun',mg:'salt',gunName:'Espingarda de sal grosso',wName:'Pé de cabra de ferro',tag:'iron',stats:{forca:5,vel:3,tiro:5,magia:4}},
+  sam:{name:'SAM',reach:[27,29,26],dmg:[6,7,12],spd:68,shootCd:1.8,magicName:'ONDA PSÍQUICA',shot:'pistol',mg:'psy',gunName:'Pistola com bala de ferro',wName:'Atiçador de ferro',tag:'iron',stats:{forca:4,vel:5,tiro:3,magia:5}},
+  john:{name:'JOHN',reach:[26,28,25],dmg:[8,8,14],spd:58,shootCd:2.2,magicName:'FACÃO GIRATÓRIO',shot:'rifle',mg:'spin',gunName:'Rifle com bala de ferro',wName:'Facão',tag:'machete',stats:{forca:5,vel:3,tiro:4,magia:3}},
+  bobby:{name:'BOBBY',reach:[24,26,24],dmg:[7,8,13],spd:55,shootCd:2,magicName:'ARMADILHA DO DIABO',shot:'flask',mg:'trap',gunName:'Frascos de água benta',wName:'Chave de roda',tag:'iron',stats:{forca:4,vel:2,tiro:4,magia:5}},
+  johnSpirit:{name:'JOHN',reach:[25,27,25],dmg:[7,8,13],spd:62,shootCd:1.8,magicName:'FÚRIA POLTERGEIST',shot:'tk',mg:'polt',gunName:'Telecinese: arremessa destroços',wName:'Toque gelado',tag:'psychic',stats:{forca:4,vel:4,tiro:4,magia:4},
     note:'Espírito: golpes e balas causam metade do dano e às vezes o atravessam. Mas ele não come, sofre mais com ataques sobrenaturais e não segura armas: na hora do Colt, quem atira é o Dean.'},
-  cas:{name:'CASTIEL',reach:[23,25,24],dmg:[9,9,15],spd:64,shootCd:2.4,magicName:'PUNIÇÃO DIVINA',gunName:'Teletransporte com asas',wName:'Lâmina angelical',tag:'blade',stats:{forca:5,vel:4,tiro:3,magia:5}},
+  cas:{name:'CASTIEL',reach:[23,25,24],dmg:[9,9,15],spd:64,shootCd:2.4,magicName:'PUNIÇÃO DIVINA',shot:'blink',mg:'smite',gunName:'Teletransporte com asas',wName:'Lâmina angelical',tag:'blade',stats:{forca:5,vel:4,tiro:3,magia:5}},
 };
 let ZONES=[];
 let traps=[];
@@ -65,6 +67,7 @@ function drawTut(){
 function startGame(){
   const C=CHAPTERS[chapter];ZONES=C.zones;layers=getLayers(chapter);
   ents=[];props=[];items=[];projs=[];parts=[];saltRings=[];traps=[];score=0;boss=null;
+  invertT=0;decals=[];memGot=0;
   P=newEnt('player',60,186);P.hp=P.maxHp=100;P.lives=2;P.magic=1;P.shootCd=0;P.combo=0;P.comboT=0;P.queued=false;P.run=false;P.jatk=false;P.face=1;P.inv=1;
   P.buf={atk:0,jump:0,shoot:0,magic:0};P.hist=[];amb=[];lastFoe=null;chain=0;chainT=0;beatT=0;msgs.length=0;
   edge.atk=edge.jump=edge.shoot=edge.magic=0;
@@ -78,7 +81,7 @@ function startGame(){
 
 /* ============ Capítulos ============ */
 let chapter=1,progress=1;
-try{progress=Math.max(1,Math.min(5,parseInt(localStorage.getItem('winchester-progresso'),10)||1));}catch(e){}
+try{progress=Math.max(1,Math.min(99,parseInt(localStorage.getItem('winchester-progresso'),10)||1));}catch(e){}
 function saveProgress(n){progress=Math.max(progress,Math.min(CHAPTERS.length-1,n));try{localStorage.setItem('winchester-progresso',String(progress));}catch(e){}}
 const BOSS_ZONE={x:STAGE_W-SW,boss:true};
 // Capítulos (um por temporada) e suas fases. 'chapter' guarda o número da fase.
@@ -148,9 +151,10 @@ function paintPortraits(){
     drawPuppet(bg,lookFor(cv2.dataset.pv),{lean:0,crouch:0,fl:[.3,.1],bl:[-.3,.1],fa:[.5,.9],ba:[-.3,.4]});
     silhouette(sg,cv2.dataset.pv==='john'&&chapter===5?'#9fd8ff':'#07060d');for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1]])g.drawImage(sil,dx,dy);g.drawImage(buf,0,0);});
 }
-function chapterIntro(n){
+function chapterIntro(n,seen){
   chapter=n;layers=getLayers(n);
   if(n===1){startIntro();return;}
+  {const A=ARCS[arcOf(n)];if(!seen&&A.scenes&&phaseOf(n)===1){playScenes(A.scenes,()=>chapterIntro(n,true));return;}}
   const C=CHAPTERS[n];mode='select';$('#cap').hidden=true;showPad();
   if(!C.heroes.includes(hero))hero=C.heroes[0];
   const nc=(C.newcomers||[]).map(k=>`<div class="newhero"><canvas width="72" height="72" data-pv="${k.id}"></canvas><div class="nh"><span class="tag">ENTRA NA EQUIPE</span><span class="nm">${k.label}</span><p>${k.why}</p></div></div>`).join('');

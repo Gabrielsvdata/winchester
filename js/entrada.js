@@ -37,7 +37,7 @@ function readInput(dt){
     for(const b in map){const p=gp.buttons[b]&&gp.buttons[b].pressed;if(p&&!gpPrev[b]){edge[map[b]]=1;audioOn();if(mode==='continue')doContinue();}gpPrev[b]=p;}
     const st=gp.buttons[9]&&gp.buttons[9].pressed;if(st&&!gpPrev.st){mode==='play'?pause():mode==='pause'&&resume();}gpPrev.st=st;
     break;}
-  x=clamp(x,-1,1);y=clamp(y,-1,1);
+  x=clamp(x,-1,1);y=clamp(y,-1,1);if(invertT>0&&mode==='play'){x=-x;y=-y;}
   const r={x,y,run,atk:!!edge.atk,jump:!!edge.jump,shoot:!!edge.shoot,magic:!!edge.magic};
   edge.atk=edge.jump=edge.shoot=edge.magic=0;
   return r;

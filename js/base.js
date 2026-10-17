@@ -29,6 +29,7 @@ function text(s,x,y,col,size,align,shadow){
 const ICONS={
   salt:{map:['..kk..','.wwww.','wwbbww','wbwwbw','wwbbww','.wwww.'],pal:{k:'#8a7a5a',w:'#f2f0ea',b:'#3a6ab0'}},
   pie:{map:['...cccc...','.cRcRRcRc.','cRRcRRcRRc','cccccccccc','.dddddddd.'],pal:{c:'#e0a050',R:'#a8283a',d:'#7a4a22'}},
+  mem:{map:['..yy..','.yyyy.','yywwyy','yywwyy','.yyyy.','..yy..'],pal:{y:'#9fd8ff',w:'#ffffff'}},
   burger:{map:['.bbbbbb.','bbwbbwbb','gggggggg','mmmmmmmm','yyyyyyyy','.bbbbbb.'],pal:{b:'#d0882a',w:'#f4e4b0',g:'#4a9a3a',m:'#6a2a1a',y:'#e8c02a'}},
 };
 
@@ -126,10 +127,10 @@ function poseFor(e){
       break;}
     case 'jump':if(e.jatk){P.fl=[1.5,0];P.bl=[-.4,1.4];P.fa=[.3,.5];P.lean=-1;}else{P.fl=[.7,1.3];P.bl=[-.3,1];P.fa=[1.9,.6];P.ba=[-1.2,.6];}break;
     case 'runatk':P.lean=4;P.fa=[1.45,0];P.ba=[1.2,.2];P.fl=[.6,.4];P.bl=[-.8,.6];break;
-    case 'shoot':P.fa=[1.57,0];P.ba=[1.4,.2];P.gun=true;P.colt=!!e.colt;P.lean=(k>.12&&k<.22)?-2:0;if(e.kind==='player'&&hero==='cas'&&!e.colt){P.gun=false;P.fa=[1.4,0];}break;
+    case 'shoot':P.fa=[1.57,0];P.ba=[1.4,.2];P.gun=true;P.colt=!!e.colt;P.lean=(k>.12&&k<.22)?-2:0;if(e.kind==='player'&&heroFor(hero).shot==='blink'&&!e.colt){P.gun=false;P.fa=[1.4,0];}break;
     case 'magic':
-      if(e.kind==='player'&&(hero==='dean'||hero==='bobby')){P.crouch=k<.12?2:5;P.lean=3;P.fl=[.9,1.6];P.bl=[-.3,1.9];P.fa=[1.0+Math.sin(k*14)*.25,.35];P.ba=[.5,.7];P.weapon=false;P.bag=hero==='dean'&&k<1;P.spray=hero==='bobby'&&k<.6;}
-      else if(e.kind==='player'&&hero==='john'){P.fa=[1.57,0];P.ba=[1.57,0];}
+      if(e.kind==='player'&&['salt','trap'].includes(heroFor(hero).mg)){P.crouch=k<.12?2:5;P.lean=3;P.fl=[.9,1.6];P.bl=[-.3,1.9];P.fa=[1.0+Math.sin(k*14)*.25,.35];P.ba=[.5,.7];P.weapon=false;P.bag=hero==='dean'&&k<1;P.spray=hero==='bobby'&&k<.6;}
+      else if(e.kind==='player'&&heroFor(hero).mg==='spin'){P.fa=[1.57,0];P.ba=[1.57,0];}
       else{P.fa=[3.05,0];P.ba=[2.8,0];P.weapon=false;P.crouch=k<.3?2:0;}
       break;
     case 'hurt':P.lean=-3;P.fa=[-.9,.7];P.ba=[-1.3,.4];P.fl=[.3,.2];P.bl=[-.3,.2];break;
@@ -138,7 +139,7 @@ function poseFor(e){
     case 'recover':P.fa=[.9,.4];P.lean=1;P.weapon=false;break;
     case 'jwind':P.fa=[2.9,.2];P.ba=[2.7,.2];P.lean=-2;P.crouch=k>.4?2:0;P.weapon=false;break;
     case 'summon':P.fa=[2.6,.4];P.ba=[2.4,.4];P.lean=-1;P.weapon=false;break;
-    case 'scream':case 'swind':P.fa=[2.3,.5];P.ba=[2.1,.5];P.lean=-2;P.mouth=k>.25;P.weapon=false;break;
+    case 'scream':case 'swind':case 'cast':P.fa=[2.3,.5];P.ba=[2.1,.5];P.lean=-2;P.mouth=k>.25;P.weapon=false;break;
     case 'cwind':P.fa=[1.3,.2];P.ba=[1.1,.3];P.lean=-3;P.claw=true;break;
     case 'charge':P.fa=[1.6,0];P.ba=[1.4,.1];P.lean=5;P.claw=true;P.mouth=true;break;
     case 'bwind':P.fa=[2.6,.8];P.lean=-2;P.claw=true;break;
