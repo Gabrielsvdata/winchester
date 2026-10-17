@@ -89,6 +89,8 @@ const ARCS=[null,
 ];
 const arcOf=n=>ARCS.findIndex(a=>a&&a.stages.includes(n));
 const phaseOf=n=>ARCS[arcOf(n)].stages.indexOf(n)+1;
+// a fonte de pixel não tem maiúsculas com acento: no HTML, tira o acento dos títulos
+const pf=t=>t.replace(/[ÁÀÂÉÊÍÓÔÚ]/g,ch=>'AAAEEIOOU'['ÁÀÂÉÊÍÓÔÚ'.indexOf(ch)]);
 const phaseLabel=n=>ARCS[arcOf(n)].stages.length>1?`CAPITULO ${arcOf(n)} · FASE ${phaseOf(n)}`:`CAPITULO ${arcOf(n)}`;
 const CHAPTERS=[null,
   {title:'A MULHER DE BRANCO',place:'JERICHO, CALIFÓRNIA',heroes:['dean','sam'],boss:'woman',
@@ -153,7 +155,7 @@ function chapterIntro(n){
   if(!C.heroes.includes(hero))hero=C.heroes[0];
   const nc=(C.newcomers||[]).map(k=>`<div class="newhero"><canvas width="72" height="72" data-pv="${k.id}"></canvas><div class="nh"><span class="tag">ENTRA NA EQUIPE</span><span class="nm">${k.label}</span><p>${k.why}</p></div></div>`).join('');
   const A=ARCS[arcOf(n)],first=phaseOf(n)===1;
-  show(`<div class="box">${first?`<p class="eyebrow">CAPITULO ${arcOf(n)} · ${A.season}</p><h2>${A.title}</h2>${A.intro?`<p class="txt">${A.intro}</p>`:''}`:''}<p class="eyebrow">${A.stages.length>1?'FASE '+phaseOf(n)+' · ':''}${C.title}</p><h2>${C.place}</h2><p class="txt" id="tw"></p>${nc}<p class="sub">${C.tip}</p>
+  show(`<div class="box">${first?`<p class="eyebrow">CAPITULO ${arcOf(n)} · ${A.season}</p><h2>${pf(A.title)}</h2>${A.intro?`<p class="txt">${A.intro}</p>`:''}`:''}<p class="eyebrow">${A.stages.length>1?'FASE '+phaseOf(n)+' · ':''}${pf(C.title)}</p><h2>${pf(C.place)}</h2><p class="txt" id="tw"></p>${nc}<p class="sub">${C.tip}</p>
     <p class="eyebrow">ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint}</p></div>`);
   typeText($('#tw'),C.intro);
   paintPortraits();
@@ -162,8 +164,8 @@ function chaptersScreen(){
   mode='controls';layers=getLayers(1);
   const b=[];
   for(let a=1;a<ARCS.length;a++){const A=ARCS[a],open=A.stages.filter(i=>i<=progress);if(!open.length)continue;
-    b.push(`<p class="eyebrow">CAPITULO ${a} · ${A.season} · ${A.title}</p>`);
-    for(const i of open)b.push(`<button class="btn${i===progress?' go':''}" data-act="chap" data-n="${i}" type="button">${A.stages.length>1?'Fase '+phaseOf(i)+': ':''}${CHAPTERS[i].title}</button>`);}
+    b.push(`<p class="eyebrow">CAPITULO ${a} · ${A.season} · ${pf(A.title)}</p>`);
+    for(const i of open)b.push(`<button class="btn${i===progress?' go':''}" data-act="chap" data-n="${i}" type="button">${A.stages.length>1?'FASE '+phaseOf(i)+': ':''}${pf(CHAPTERS[i].title)}</button>`);}
   show(`<div class="box"><p class="eyebrow">CAPITULOS E FASES LIBERADOS</p><div class="row" style="flex-direction:column;align-items:stretch">${b.join('')}</div><div class="row"><button class="btn" data-act="title" type="button">◀ VOLTAR</button></div></div>`);
 }
 
