@@ -106,7 +106,7 @@ MAGICS.contract=(p,H,dt)=>{ // Crowley: cada alma tem seu preço
 MAGICS.neph=(p,H,dt)=>{ // Jack: explosão de graça na tela toda
   if(p.stT<.6&&Math.random()<.8)parts.push({x:p.x+rand(-10,10),y:p.y,z:rand(10,50),vx:0,vy:0,vz:rand(20,60),life:.4,max:.4,col:'#ffd23a',size:2,grav:0});
   if(p.stT>=.6&&!p.mDone){p.mDone=true;flash=1;shake=10;sfx('colt');
-    for(const e of ents){if(e.dead||e.x<cam.x-10||e.x>cam.x+SW+10||['dead','dying','vanish','bout'].includes(e.st))continue;damage(e,Math.round((12+12*p.mlvl)*1.5),true,sgn(e.x-p.x),{tag:'smite'});}
+    for(const e of ents){if(e.dead||e.x<cam.x-10||e.x>cam.x+SW+10||['dead','dying','vanish','bout'].includes(e.st))continue;damage(e,Math.round((12+12*p.mlvl)*1.5),true,sgn(e.x-p.x),{tag:'smite'});addFx({k:'pillar',x:e.x,y:e.y,dur:.8,col:'#ffd23a',w:22});}
     for(let i=0;i<50;i++)parts.push({x:cam.x+rand(0,SW),y:rand(LT,LB),z:rand(0,80),vx:0,vy:0,vz:rand(40,120),life:.8,max:.8,col:i%2?'#ffd23a':'#fff4c0',size:2,grav:0});}
   return p.stT>1.2;};
 MAGICS.mark=(p,H,dt)=>{ // Dean: a fúria da Marca de Caim
@@ -117,7 +117,7 @@ MAGICS.mark=(p,H,dt)=>{ // Dean: a fúria da Marca de Caim
 /* ============ Chefes ============ */
 function proj3(e,p,kind,spd,dmg,dys,o){for(const dy of dys)projs.push(Object.assign({kind,x:e.x+e.face*12,y:clamp(e.y+dy,LT,LB),z:28,vx:e.face*spd,life:2.6,dmg,owner:'e'},o||{}));}
 function lightBlast(e){ // a luz branca de Lilith
-  flash=.9;shake=8;sfx('magic');
+  flash=.9;shake=8;sfx('magic');addFx({k:'pillar',x:e.x,y:e.y,dur:.7,col:'#ffffff',w:30});
   for(const dy of[-14,0,14])projs.push({kind:'light',big:true,x:e.x+e.face*10,y:clamp(e.y+dy,LT,LB),z:20,vx:e.face*150,life:2.4,dmg:13,owner:'e'});
 }
 let memGot=0,invertT=0;
@@ -171,7 +171,7 @@ Object.assign(BOSSDEF,{
       return false;},
     pick:(e,near,r)=>near?'bout':r<.45?'throw':r<.75?'pinw':'cast',
     fire:(e,p)=>{sfx('swing');proj3(e,p,'page',160,11,[-18,-6,6,18]);},
-    cast:(e,p)=>{invertT=4;banner={l1:'CHUCK REESCREVE AS REGRAS',l2:'OS CONTROLES ESTÃO INVERTIDOS',t:2,small:true};sfx('magic');flash=.4;},
+    cast:(e,p)=>{addFx({k:'ink',x:p.x,y:p.y,dur:.7});invertT=4;banner={l1:'CHUCK REESCREVE AS REGRAS',l2:'OS CONTROLES ESTÃO INVERTIDOS',t:2,small:true};sfx('magic');flash=.4;},
     onDie:b=>{banner={l1:'TODOS JUNTOS',l2:'DEAN, SAM, CASTIEL E JACK',t:3};flash=1;shake=14;},
     die:(e,dt)=>{e.alpha=1;if(Math.random()<.5)parts.push({x:e.x+rand(-10,10),y:e.y,z:rand(0,46),vx:0,vy:0,vz:rand(20,60),life:.6,max:.6,col:'#ffd23a',size:2,grav:0});if(e.stT>2.6&&!endT)endT=1.5;}},
 });

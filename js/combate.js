@@ -137,12 +137,13 @@ function updPlayer(dt,inp){
         if(p.stT>1.1){p.st='idle';p.ring=null;}
         break;}
       if(H.mg==='spin'){
+        if(!p.tor){p.tor=1;addFx({k:'tornado',follow:true,dur:1.05,col:'#c8d0d8'});}
         p.spinT-=dt;
         if(p.stT>.1&&p.stT<1.05){p.face=Math.floor(p.stT/.07)%2?-p.face0:p.face0;
           if(p.spinT<=0){p.spinT=.14;sfx('swing');const last=p.stT>.9;
             for(const e of ents){if(e.dead||SKIP_ST.includes(e.st))continue;if(Math.abs(e.x-p.x)<38&&Math.abs(e.y-p.y)<12)damage(e,5+3*p.mlvl,last,sgn(e.x-p.x),{tag:'machete'});}
             for(const pr of props)if(!pr.dead&&Math.abs(pr.x-p.x)<38&&Math.abs(pr.y-p.y)<12)damage(pr,1,false,1,{});}}
-        if(p.stT>1.1){p.st='idle';p.face=p.face0;}
+        if(p.stT>1.1){p.st='idle';p.face=p.face0;p.tor=0;}
         break;}
       if(H.mg==='trap'){
         if(p.stT<.5&&Math.random()<.6)parts.push({x:p.x+p.face*12,y:p.y+rand(-2,2),z:rand(2,8),vx:p.face*rand(10,30),vy:0,vz:rand(-10,10),life:.4,max:.4,col:'#c83020',size:1,grav:1});
@@ -152,7 +153,8 @@ function updPlayer(dt,inp){
       if(p.stT>=.6&&!p.mDone){p.mDone=true;flash=.6;shake=8;
         const dmg=Math.round((12+12*p.mlvl)*(H.magicMult||1)),tag=H.mg==='smite'?'smite':'psychic';
         if(H.mg==='smite')flash=1;
-        for(const e of ents){if(e.dead||e.x<cam.x-10||e.x>cam.x+SW+10)continue;if(['dead','dying','vanish','bout'].includes(e.st))continue;damage(e,dmg,e.isBoss?p.mlvl>=3:true,sgn(e.x-p.x),{tag});}
+        for(const e of ents){if(e.dead||e.x<cam.x-10||e.x>cam.x+SW+10)continue;if(['dead','dying','vanish','bout'].includes(e.st))continue;damage(e,dmg,e.isBoss?p.mlvl>=3:true,sgn(e.x-p.x),{tag});
+          if(H.mg==='smite')addFx({k:'pillar',x:e.x,y:e.y,dur:.7,col:'#fff2b0',w:18});else if(H.mg==='polt')addFx({k:'tornado',x:e.x,y:e.y,dur:.6,col:'#9fd8ff'});else addFx({k:'bolt',x:e.x,y:e.y,dur:.3,col:'#a070ff'});}
         if(isSpirit())for(let i=0;i<30;i++)parts.push({x:cam.x+rand(0,SW),y:rand(LT,LB),z:rand(0,60),vx:rand(-40,40),vy:0,vz:rand(-20,40),life:.6,max:.6,col:i%2?'#9fd8ff':'#e0f4ff',size:2,grav:0});
         if(H.mg==='smite'){P.hp=Math.min(P.maxHp,P.hp+12);floatMsg('+12',p.x,p.y);for(let i=0;i<40;i++)parts.push({x:cam.x+rand(0,SW),y:rand(LT,LB),z:rand(0,80),vx:0,vy:0,vz:rand(60,140),life:.7,max:.7,col:i%2?'#ffffff':'#fff2b0',size:2,grav:0});}
         if(H.mg==='psy'||H.mg==='blood')for(let i=0;i<3;i++)parts.push({ring:true,x:p.x,y:p.y,z:26,r:6+i*10,vr:220,life:.6,max:.6,col:'#c8a0ff'});
@@ -280,7 +282,7 @@ function updBossX(e,dt){
     case 'pinw':e.face=-side;
       if(e.stT>.9){const pn=e.pin;
         if(pn&&p.inv<=0&&!['down','air'].includes(p.st)&&Math.abs(p.x-pn.x)<24&&Math.abs(p.y-pn.y)<10&&p.z<10){damage(p,13,true,sgn(p.x-e.x),{super:true});sfx('heavy');shake=6;}
-        e.pin=null;e.st='recover';e.stT=0;}return;
+        if(pn)pinFx(e,pn);e.pin=null;e.st='recover';e.stT=0;}return;
     case 'bout':e.alpha=Math.max(0,1-e.stT/.3);if(Math.random()<.6)smokePuff(e);
       if(e.stT>.3){e.x=clamp(p.x-p.face*38,cam.x+14,cam.x+SW-14);e.y=p.y;e.face=e.x<p.x?1:-1;e.st='bin';e.stT=0;}return;
     case 'bin':e.alpha=Math.min(1,e.stT/.2);if(e.stT>.2){e.alpha=1;e.st='bwind';e.stT=0;}return;

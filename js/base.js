@@ -13,6 +13,16 @@ const FONT='"Press Start 2P", monospace';
 /* ============ Primitivas de pixel ============ */
 function px(g,x,y,w,h,col){g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),w,h);}
 function limb(g,x0,y0,x1,y1,w,col){g.fillStyle=col;const dx=x1-x0,dy=y1-y0,n=Math.max(1,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))));for(let i=0;i<=n;i++){g.fillRect(Math.round(x0+dx*i/n-w/2),Math.round(y0+dy*i/n-w/2),w,w);}}
+const SHC={};
+function shade(c,k){const key=c+k;if(SHC[key])return SHC[key];if(typeof c!=='string'||c[0]!=='#'||c.length!==7)return SHC[key]=c;
+  const f=v=>Math.max(0,Math.min(255,Math.round(k>0?v+(255-v)*k:v*(1+k))));
+  return SHC[key]='#'+[1,3,5].map(i=>f(parseInt(c.slice(i,i+2),16)).toString(16).padStart(2,'0')).join('');}
+// membro com volume: borda clara do lado da luz e borda escura do outro
+function slimb(g,x0,y0,x1,y1,w,col){limb(g,x0,y0,x1,y1,w,col);if(w<3)return;
+  const dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy)||1;let nx=-dy/l,ny=dx/l;if(nx*.55+ny*-.83<0){nx=-nx;ny=-ny;}
+  const o=w/2-.5,n=Math.max(1,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))));
+  g.fillStyle=shade(col,.3);for(let i=0;i<=n;i++)g.fillRect(Math.round(x0+dx*i/n+nx*o-.5),Math.round(y0+dy*i/n+ny*o-.5),1,1);
+  g.fillStyle=shade(col,-.35);for(let i=0;i<=n;i++)g.fillRect(Math.round(x0+dx*i/n-nx*o-.5),Math.round(y0+dy*i/n-ny*o-.5),1,1);}
 function disc(g,cx,cy,r,col){g.fillStyle=col;for(let y=-r;y<=r;y++){const hw=Math.round(Math.sqrt(r*r-y*y));g.fillRect(Math.round(cx-hw),Math.round(cy+y),hw*2+1,1);}}
 function icon(g,map,pal,x,y){for(let r=0;r<map.length;r++)for(let k=0;k<map[r].length;k++){const ch=map[r][k];if(ch!=='.'){g.fillStyle=pal[ch];g.fillRect(x+k,y+r,1,1);}}}
 const ACC={'Á':'A´','À':'A`','Â':'A^','Ã':'A~','É':'E´','Ê':'E^','Í':'I´','Ó':'O´','Ô':'O^','Õ':'O~','Ú':'U´','Ç':'C,'};
@@ -65,27 +75,28 @@ function drawPuppet(g,L,P){
   const T=L.tall||0,th=10+T*.4,sh=10+T*.4,tor=17+T*.5,ua=8,fa=8;
   const hipX=OX,hipY=OY-th-sh+(P.crouch||0);
   const neckX=hipX+(P.lean||0),neckY=hipY-tor;
-  const leg=(a,col)=>{const kx=hipX+Math.sin(a[0])*th,ky=hipY+Math.cos(a[0])*th,s=a[0]-a[1],fx=kx+Math.sin(s)*sh,fy=ky+Math.cos(s)*sh;limb(g,hipX,hipY,kx,ky,4,col);limb(g,kx,ky,fx,fy,4,col);px(g,fx-1,fy-1,5,3,L.boots);};
-  const arm=(a,col)=>{const sx=neckX,sy=neckY+3,ex=sx+Math.sin(a[0])*ua,ey=sy+Math.cos(a[0])*ua,s=a[0]+a[1],hx=ex+Math.sin(s)*fa,hy=ey+Math.cos(s)*fa;limb(g,sx,sy,ex,ey,4,col);limb(g,ex,ey,hx,hy,3,col);px(g,hx-1,hy-1,3,3,L.skin);return{hx,hy,s};};
+  const leg=(a,col)=>{const kx=hipX+Math.sin(a[0])*th,ky=hipY+Math.cos(a[0])*th,s=a[0]-a[1],fx=kx+Math.sin(s)*sh,fy=ky+Math.cos(s)*sh;slimb(g,hipX,hipY,kx,ky,4,col);slimb(g,kx,ky,fx,fy,4,col);px(g,fx-1,fy-1,5,3,L.boots);};
+  const arm=(a,col)=>{const sx=neckX,sy=neckY+3,ex=sx+Math.sin(a[0])*ua,ey=sy+Math.cos(a[0])*ua,s=a[0]+a[1],hx=ex+Math.sin(s)*fa,hy=ey+Math.cos(s)*fa;slimb(g,sx,sy,ex,ey,4,col);slimb(g,ex,ey,hx,hy,3,col);px(g,hx-1,hy-1,3,3,L.skin);return{hx,hy,s};};
   if(L.skirt){
     const flow=P.flow||0;
     for(let y=Math.round(hipY-3);y<=OY;y++){const k=(y-hipY+3)/(OY-hipY+3),w=Math.round(5+k*8+Math.sin(y*.5+flow)*1.2),x=hipX+(P.lean||0)*(1-k)*.4;px(g,x-w,y,w,1,L.dressD);px(g,x,y,w+1,1,L.dress);}
   }else leg(P.bl,L.pantsD);
   arm(P.ba,L.jacketD);
-  limb(g,hipX,hipY-2,neckX,neckY+3,9,L.jacket);
+  slimb(g,hipX,hipY-2,neckX,neckY+3,9,L.jacket);
   if(L.plaid){for(let y=Math.round(neckY+5);y<hipY-1;y+=3){const k=(hipY-y)/(hipY-neckY),x=hipX+(neckX-hipX)*k;px(g,x-4,y,9,1,L.plaid);}for(let d=-3;d<=3;d+=3)limb(g,hipX+d,hipY-3,neckX+d,neckY+4,1,L.plaid);}
   limb(g,hipX+2,hipY-3,neckX+2,neckY+5,3,L.shirt);
   if(L.tie)limb(g,hipX+2,hipY-6,neckX+2,neckY+5,1,L.tie);
   if(!L.skirt){px(g,hipX-4,hipY-3,9,2,'#1a1410');leg(P.fl,L.pants);}
   const hx=neckX+1,hy=neckY-4;
   if(L.style==='woman'){px(g,hx-6,hy-3,5,15,L.hair);}
-  disc(g,hx,hy,4,L.skin);
+  disc(g,hx,hy,4,L.skin);px(g,hx-4,hy,1,3,shade(L.skin,-.3));px(g,hx-2,hy+3,4,1,shade(L.skin,-.22));px(g,hx+1,hy-3,2,1,shade(L.skin,.25));
   g.fillStyle=L.hair;
   if(L.style==='short'){g.fillRect(hx-4,hy-5,9,3);g.fillRect(hx-4,hy-3,2,3);g.fillRect(hx+3,hy-4,2,1);}
   else if(L.style==='long'){g.fillRect(hx-4,hy-5,9,3);g.fillRect(hx-5,hy-3,3,7);g.fillRect(hx+2,hy-3,3,2);}
   else if(L.style==='woman'){g.fillRect(hx-5,hy-5,10,3);g.fillRect(hx-5,hy-3,3,9);g.fillRect(hx+3,hy-3,2,6);}
   else if(L.style==='messy'){g.fillRect(hx-4,hy-5,9,3);g.fillRect(hx-3,hy-6,2,1);g.fillRect(hx+1,hy-6,2,1);g.fillRect(hx-4,hy-3,2,2);}
   else if(L.style==='cap'){g.fillRect(hx-4,hy-3,2,3);g.fillStyle=L.cap;g.fillRect(hx-5,hy-6,10,3);g.fillRect(hx+2,hy-4,5,1);}
+  if(L.style!=='cap')px(g,hx-1,hy-5,4,1,shade(L.hair,.35));
   if(P.mouth){px(g,hx+1,hy+1,3,3,'#000');if(L.fangs){px(g,hx+1,hy+1,1,1,'#fff');px(g,hx+3,hy+1,1,1,'#fff');}}
   if(L.beard){px(g,hx-1,hy+2,5,2,L.beard);px(g,hx-3,hy,2,3,L.beard);}
   px(g,hx+2,hy-1,1,2,L.eye||'#1a1010');

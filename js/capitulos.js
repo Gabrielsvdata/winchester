@@ -67,7 +67,7 @@ function drawTut(){
 function startGame(){
   const C=CHAPTERS[chapter];ZONES=C.zones;layers=getLayers(chapter);
   ents=[];props=[];items=[];projs=[];parts=[];saltRings=[];traps=[];score=0;boss=null;
-  invertT=0;decals=[];memGot=0;
+  invertT=0;decals=[];memGot=0;fxs=[];
   P=newEnt('player',60,186);P.hp=P.maxHp=100;P.lives=2;P.magic=1;P.shootCd=0;P.combo=0;P.comboT=0;P.queued=false;P.run=false;P.jatk=false;P.face=1;P.inv=1;
   P.buf={atk:0,jump:0,shoot:0,magic:0};P.hist=[];amb=[];lastFoe=null;chain=0;chainT=0;beatT=0;msgs.length=0;
   edge.atk=edge.jump=edge.shoot=edge.magic=0;
