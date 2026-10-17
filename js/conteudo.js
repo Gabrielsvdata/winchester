@@ -329,6 +329,8 @@ ARCS.push(
     ]},
 );
 progress=Math.min(progress,CHAPTERS.length-1);
+// atalho de teste: ?todos libera todos os capítulos
+if(/[?&]todos\b/.test(location.search))saveProgress(CHAPTERS.length-1);
 
 /* ============ Cenas ============ */
 // mkScene: monta uma cena com o cenário de uma fase, personagens e efeitos
