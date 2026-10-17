@@ -12,16 +12,16 @@ Fan game beat 'em up em pixel art, no estilo Golden Axe / Mega Drive, inspirado 
 
 1. **Tela inicial:** o Impala na estrada à noite, com chuva, relâmpagos e o logo piscando como luz com mau contato.
 2. **Abertura "A estrada até aqui":** 6 cenas animadas contam a origem dos Winchester: o incêndio de 1983 em Lawrence, os olhos amarelos, a vida na estrada, Stanford e a pista de Jericho.
-3. **4 capítulos**, cada um com história antes e depois, escolha de caçador, fase própria e chefe:
+3. **Capítulos por temporada, divididos em fases**, cada fase com história antes e depois, escolha de caçador, cenário próprio e chefe:
 
-| Capítulo | Lugar | Inimigos | Chefe | Caçadores |
-|---|---|---|---|---|
-| 1. A Mulher de Branco | Jericho, Califórnia: estrada na mata, ponte e a casa da Constance | Espíritos | A Mulher de Branco | Dean, Sam |
-| 2. Sangue de Morto | Manning, Colorado: fazenda e celeiro do ninho | Vampiros | Luther, o líder do ninho | + John |
-| 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby |
-| 4. O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
+| Capítulo | Fase | Lugar | Inimigos | Chefe | Caçadores |
+|---|---|---|---|---|---|
+| 1. O Negócio da Família (temporada 1) | 1. A Mulher de Branco | Jericho, Califórnia: estrada na mata, ponte e a casa da Constance | Espíritos | A Mulher de Branco | Dean, Sam |
+| | 2. Sangue de Morto | Manning, Colorado: fazenda e celeiro do ninho | Vampiros | Luther, o líder do ninho | + John |
+| | 3. Olhos Negros | Ferro-velho do Bobby, Dakota do Sul | Demônios e vampiros | Meg | + Bobby |
+| 2. O Portão do Diabo (temporada 2) | O Portão do Diabo | Cemitério em Wyoming | Demônios, vampiros e espíritos | Azazel, o demônio de olhos amarelos | Dean, Sam, Bobby e o espírito do John |
 
-Na transição entre capítulos, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, e no capítulo final o espírito de John escapa do Portão do Diabo. A história segue a série à risca, sem furos de roteiro: o Castiel, por exemplo, só chega na Parte 2, como na temporada 4. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
+Na transição entre fases, a história continua e cada personagem novo é apresentado com o motivo de entrar na equipe: John reaparece em Manning atrás do Colt, Bobby abre o ferro-velho, e no Portão do Diabo o espírito de John escapa do inferno. A história segue a série à risca, sem furos de roteiro: o Castiel, por exemplo, só chega no capítulo 4, como na temporada 4. A escolha do caçador acontece na mesma tela, com os novos marcados como **NOVO**.
 
 O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera os capítulos já alcançados.
 
@@ -54,7 +54,7 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | John | Facão | Rifle que atravessa vários inimigos | Facão giratório |
 | Bobby | Chave de roda | Frascos de água benta, que explodem em área | Armadilha do Diabo: prende demônios e atrasa o resto |
 | Espírito do John (cap. 4) | Toque gelado | Telecinese: arremessa destroços | Fúria poltergeist. Recebe metade do dano físico e às vezes é atravessado pelos golpes, mas não come, sofre mais com ataques sobrenaturais e não segura armas |
-| Castiel (Parte 2) | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
+| Castiel (capítulo 4) | Lâmina angelical | Teletransporte com asas para as costas do inimigo | Punição divina: luz na tela toda, que também cura |
 
 ### Inimigos
 
@@ -81,7 +81,7 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 
 ## Como foi feito
 
-Tudo em um único arquivo HTML, sem engine, sem bibliotecas e sem imagens.
+Sem engine, sem bibliotecas e sem imagens: só HTML, CSS e JavaScript, com o código dividido em arquivos por assunto (veja a seção Arquivos).
 
 - **Gráficos:** HTML5 Canvas em 320×224, a resolução do Mega Drive, ampliado sem suavização. Os personagens são bonecos com esqueleto (quadril, joelhos, ombros, cotovelos) desenhados pixel a pixel a cada quadro, com contorno, rotação ao cair e efeito de falha nos fantasmas.
 - **Cenário:** 4 fases com camadas de parallax geradas por código: estrada e ponte de Jericho, fazenda e celeiro sob lua vermelha, pilhas de carros do ferro-velho e o cemitério com o Portão do Diabo. Cada fase tem seu clima: chuva em Jericho, vaga-lumes na fazenda, cinzas no ferro-velho e brasas saindo do Portão.
@@ -96,7 +96,17 @@ Tudo em um único arquivo HTML, sem engine, sem bibliotecas e sem imagens.
 
 ```
 winchester/
-├── index.html        # o jogo inteiro (HTML, CSS e JavaScript)
+├── index.html        # página, estilos e ordem dos scripts
+├── js/
+│   ├── base.js       # constantes, primitivas de pixel, boneco e poses
+│   ├── cenario.js    # cenários de cada fase
+│   ├── audio.js      # efeitos e trilhas
+│   ├── capitulos.js  # estado, treino, capítulos, fases e textos da história
+│   ├── entrada.js    # teclado, toque e controle
+│   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
+│   ├── quadro.js     # atualização de cada quadro e desenho da fase
+│   ├── telas.js      # tela inicial, abertura, menus e telas de história
+│   └── main.js       # laço principal
 ├── audio/
 │   ├── abertura.mp3  # introdução da tela inicial
 │   └── LEIA-ME.txt
@@ -124,12 +134,25 @@ Abra o endereço mostrado no terminal. O `index.html` também abre direto no nav
 
 ## Próximos passos
 
-**Parte 2: O Apocalipse (temporadas 3 a 5)**, em produção:
+O jogo vai cobrir a série inteira com 8 capítulos jogáveis, escolhidos entre as temporadas mais queridas pelos fãs. As outras temporadas entram como interlúdios: cenas animadas que contam a história entre um capítulo e outro, para não deixar buracos.
 
-5. Um Ano: o pacto do Dean, os Sete Pecados, os cães do inferno e Lilith.
-6. Os 66 Selos: Castiel tira o Dean do inferno; Sam mata Lilith e liberta Lúcifer.
-7. Os Cavaleiros: Guerra, Fome, Peste e Morte, e os quatro anéis.
-8. A Jaula: cemitério de Stull, Lúcifer no Sam, Miguel no Adam.
+| | Tipo | Temporadas | Conteúdo |
+|---|---|---|---|
+| 1. O Negócio da Família | Jogável (pronto) | 1 | Mulher de Branco, o ninho de vampiros e Meg |
+| 2. O Portão do Diabo | Jogável (pronto, ganha mais uma fase) | 2 | Cold Oak, o pacto do Dean e Azazel |
+| 3. Um Ano | Jogável | 3 | O pacto do Dean, Lilith e os cães do inferno |
+| 4. Os Selos | Jogável | 4 | Castiel tira o Dean do inferno; Chuck aparece como profeta; Lúcifer se levanta |
+| 5. A Jaula | Jogável | 5 | Os Cavaleiros e o cemitério de Stull: Sam cai na Jaula com Lúcifer e Miguel |
+| Interlúdio | Cenas | 6 a 8 | Sam sem alma, Castiel se declara Deus, Leviatãs, Purgatório, Crowley Rei do Inferno |
+| 6. A Marca de Caim | Jogável | 9 e 10 | Dean com a Marca, Abaddon e Crowley jogável |
+| 7. A Escuridão | Jogável | 11 | Amara e a revelação do Chuck |
+| Interlúdio | Cenas | 12 a 14 | Mary volta, Jack nasce, Miguel do outro mundo |
+| 8. O Autor | Jogável | 15 | Chuck como chefe final e Jack jogável |
+
+**O final.** Na luta final, Chuck reescreve o jogo: traz de volta chefes antigos, inverte os controles e escreve "FIM" na tela. No fim, ele oferece ao Dean o roteiro que escreveu, e o jogador escolhe:
+
+- **Aceitar o final escrito:** Dean se sacrifica para segurar o Chuck, e Sam segue a vida com a Eileen e o filho.
+- **Rasgar o roteiro:** a família vence junta, Jack assume o Céu e traz Castiel de volta do Vazio, e os irmãos só se reencontram na ponte do Céu depois de uma vida inteira.
 
 ## Autor
 
