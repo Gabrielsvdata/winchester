@@ -26,7 +26,8 @@ function damage(b,dmg,kd,dir,opt){
     else{if(Math.random()<.25){floatMsg('ATRAVESSOU',b.x,b.y);for(let i=0;i<8;i++)parts.push({x:b.x+rand(-8,8),y:b.y,z:rand(10,44),vx:rand(-20,20),vy:0,vz:rand(-10,20),life:.4,max:.4,col:'#9fd8ff',size:2,grav:0});sfx('vanish');return;}
       dmg=Math.round(dmg*.5);kd=false;}
   }
-  if(opt&&opt.tag&&b.type){const m=(WEAK[b.type]||{})[opt.tag];if(m)dmg=Math.round(dmg*m);}
+  if(b.kind==='enemy'&&!(opt&&opt.body)){const m=weakMult(b,opt&&opt.tag);dmg=Math.max(1,Math.round(dmg*m));weakFeedback(b,m);
+    if(hero==='john'&&!isSpirit()&&CLS[b.type]==='vamp'){if(!(b.dmbT>0))floatMsg('SANGUE DE MORTO',b.x,b.y-10);b.dmbT=5;}}
   if(b.type==='azazel'){
     if(b.st==='held'||b.st==='dying')return;
     b.ctrl-=dmg;b.flash=.12;spark(b.x+dir*-4,b.y-b.z-30,'#ffd400');score+=dmg*10;
@@ -59,7 +60,7 @@ function dust(x,y,n,col){for(let i=0;i<n;i++)parts.push({x:x+rand(-6,6),y:y+rand
 function bodyHit(e){
   if(Math.abs(e.vx)<60||e.z>30)return;
   for(const o of ents){if(o===e||o.dead||o.isBoss||SKIP_ST.includes(o.st)||o.st==='held'||(e.bodySet&&e.bodySet.has(o)))continue;
-    if(Math.abs(o.x-e.x)<14&&Math.abs(o.y-e.y)<8){(e.bodySet=e.bodySet||new Set()).add(o);damage(o,7,true,sgn(e.vx),{});sfx('heavy');hitstop=Math.max(hitstop,.05);floatMsg('DERRUBOU!',o.x,o.y);score+=60;}}
+    if(Math.abs(o.x-e.x)<14&&Math.abs(o.y-e.y)<8){(e.bodySet=e.bodySet||new Set()).add(o);damage(o,7,true,sgn(e.vx),{body:true});sfx('heavy');hitstop=Math.max(hitstop,.05);floatMsg('DERRUBOU!',o.x,o.y);score+=60;}}
 }
 function physicsAir(e,dt){
   e.x+=e.vx*dt;e.z+=e.vz*dt;e.vz-=GRAV*dt;
@@ -196,14 +197,9 @@ const DEMONS=[
   {skin:'#d8aa86',hair:'#8a6a3a',style:'short',jacket:'#4a4a3a',jacketD:'#323226',shirt:'#7a7a70',plaid:'#3a3a2c',pants:'#3a3028',pantsD:'#28201a',boots:'#1a1410',eye:'#000',tall:2},
   {skin:'#b07a56',hair:'#141010',style:'messy',jacket:'#2a3a2a',jacketD:'#1c281c',shirt:'#a09070',pants:'#202428',pantsD:'#14181c',boots:'#0e0e0e',eye:'#000'},
 ];
-const WEAK={
-  v:{salt:1.5,iron:1.2},g:{salt:1.5,iron:1.2},woman:{salt:1.4,iron:1.1},
-  vp:{machete:1.6,blade:1.5},luther:{machete:1.5,blade:1.4},
-  dm:{holy:2,smite:1.5,blade:1.6,salt:1.3},ac:{holy:2,smite:1.5,blade:1.6,salt:1.3},meg:{holy:1.8,smite:1.4,blade:1.5,salt:1.2},
-};
 const SKIP_ST=['down','air','dead','dying','vanish','bout','appear','drop'];
 function spawnEnemy(type,x,y){
-  const e=newEnt('enemy',x,y);e.type=type;e.ai=type;e.offY=rand(-22,22);e.face=x<P.x?1:-1;e.throwCd=rand(2,4);
+  const e=newEnt('enemy',x,y);e.type=type;e.ai=type;noteCreature(type);e.offY=rand(-22,22);e.face=x<P.x?1:-1;e.throwCd=rand(2,4);
   const DF=ENEMYDEF[type];
   if(DF){e.ai=DF.ai;e.hp=e.maxHp=DF.hp;e.look=typeof DF.look==='function'?DF.look():DF.look;e.spd=rand(DF.spd[0],DF.spd[1]);e.dmg=DF.dmg;e.outline=DF.outline;for(const k of['ghost','demon','hound','human','angel','dark','noThrow'])if(DF[k])e[k]=true;}
   else if(type==='ac'){e.ai='v';e.demon=true;e.hp=e.maxHp=30;e.look=ACHERI;e.spd=rand(42,48);e.dmg=8;e.outline='#0c0610';}
@@ -220,7 +216,7 @@ function spawnEnemy(type,x,y){
   ents.push(e);return e;
 }
 function spawnBoss(){
-  const k=CHAPTERS[chapter].boss;let e;
+  const k=CHAPTERS[chapter].boss;let e;noteCreature(k);
   if(BOSSDEF[k]){spawnBossDef(k);return;}
   if(k==='woman'){
     e=newEnt('enemy',cam.x+SW-50,180);e.type='woman';e.isBoss=true;e.ghost=true;e.hp=e.maxHp=360;e.look=LOOKS.woman;e.spd=30;e.face=-1;e.st='appear';e.alpha=0;e.atkCd=1.6;e.sum1=false;e.sum2=false;e.name='MULHER DE BRANCO';
@@ -396,8 +392,10 @@ function updEnemy(e,dt){
   else e.st='idle';
   e.face=p.x>e.x?1:-1;
   e.y=clamp(e.y,LT,LB);
-  if(e.type==='vp'&&e.hp<e.maxHp)e.hp=Math.min(e.maxHp,e.hp+2*dt);
+  if(e.dmbT>0)e.dmbT-=dt;
+  if(e.type==='vp'&&e.hp<e.maxHp&&!(e.dmbT>0))e.hp=Math.min(e.maxHp,e.hp+2*dt);
   if(pDown)return;
+  if(e.hound&&hero==='crowley'){if(!e.obey){e.obey=1;floatMsg('O CÃO OBEDECE O REI',e.x,e.y);}return;}
   if(e.ai==='vp'){if(e.engaged&&Math.abs(p.x-e.x)<72&&Math.abs(p.y-e.y)<7&&e.atkCd<=0){e.st='lwind';e.stT=0;}return;}
   if(e.ai==='dm'){
     if(e.engaged&&Math.abs(p.x-e.x)<30&&Math.abs(p.y-e.y)<6&&e.atkCd<=0){e.st='windup';e.stT=0;}

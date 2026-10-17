@@ -4,8 +4,9 @@ let titleMenu=false,titleSel=0,logoCv=null,lightT=0,boltX=0,rain=[];
 const flick=new Array(10).fill(0);
 const IN_PORTFOLIO=location.pathname.indexOf('/jogos/')===0;
 let MENU=[];
-function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
+function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'DIÁRIO DO JOHN',act:()=>diaryScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
 const MENU_Y=166;
+const menuY=()=>MENU_Y-Math.max(0,MENU.length-3)*14;
 function titleScreen(){buildMenu();layers=getLayers(1);mode='title';hideScreen();$('#cap').hidden=true;titleMenu=false;titleSel=0;showPad();playSong('title');}
 function titleConfirm(){audioOn();if(!titleMenu){titleMenu=true;sfx('pick');playSong('title');return;}sfx('pick');MENU[titleSel].act();}
 function titleNav(d){audioOn();if(!titleMenu){titleMenu=true;return;}titleSel=(titleSel+d+MENU.length)%MENU.length;sfx('swing');}
@@ -80,8 +81,8 @@ function renderTitle(){
   if(mode==='controls')return;
   if(!titleMenu){if(Math.floor(t*2)%2===0)text(touchMode?'TOQUE PARA COMEÇAR':'APERTE START',160,MENU_Y+12,'#efe8d6',8,'center');}
   else{
-    c.fillStyle='rgba(6,5,12,.75)';c.fillRect(56,MENU_Y-7,208,MENU.length*14+8);
-    MENU.forEach((m,i)=>{const on=i===titleSel,y=MENU_Y+i*14;text(m.label,160,y,on?'#f2b632':'#9fb6c8',8,'center');
+    c.fillStyle='rgba(6,5,12,.75)';c.fillRect(56,menuY()-7,208,MENU.length*14+8);
+    MENU.forEach((m,i)=>{const on=i===titleSel,y=menuY()+i*14;text(m.label,160,y,on?'#f2b632':'#9fb6c8',8,'center');
       if(on){const ax=Math.round(160-m.label.length*4-12);c.fillStyle='#f2b632';for(let k=0;k<4;k++)c.fillRect(ax+k,y+k,1,8-k*2);}});
   }
   text('FAN GAME GRATUITO E NÃO OFICIAL',160,214,'#5c5874',6,'center',false);
@@ -251,7 +252,7 @@ const INTRO=[
 function selectScreen(){
   mode='select';layers=getLayers(chapter);$('#cap').hidden=true;
   const C=CHAPTERS[chapter];if(!C.heroes.includes(hero))hero=C.heroes[0];
-  show(`<div class="box"><p class="eyebrow">${phaseLabel(chapter)} · ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint}</p></div>`);
+  show(`<div class="box"><p class="eyebrow">${phaseLabel(chapter)} · ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint} ${weakTip(chapter)}</p></div>`);
   paintPortraits();
 }
 function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p class="eyebrow">PAUSA</p><h2>Respira, caçador.</h2>${touchMode?`<dl class="keys"><dt>MOVER</dt><dd>Analógico. Empurre até o fim para correr.</dd><dt>ATACAR</dt><dd>3 toques seguidos fazem o combo.</dd><dt>PULO</dt><dd>Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>Recarrega sozinho.</dd><dt>MAGIA</dt><dd>Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>ATACAR + PULO juntos: gira e afasta todos. Custa um pouco de vida.</dd></dl>`:`<dl class="keys"><dt>MOVER</dt><dd>Setas ou WASD. Toque duas vezes para o lado para correr.</dd><dt>ATACAR</dt><dd>J ou Z. Três seguidos fazem o combo.</dd><dt>PULAR</dt><dd>K, X ou Espaço. Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>L ou C. Recarrega sozinho.</dd><dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>J + K juntos: gira e afasta todos. Custa um pouco de vida.</dd></dl>`}<div class="row"><button class="btn go" data-act="resume">▶ CONTINUAR</button><button class="btn" data-act="restart">REINICIAR</button><button class="btn" data-act="title">MENU</button></div></div>`);showPad();}

@@ -60,7 +60,7 @@ $('#app').addEventListener('pointerdown',e=>{
   if(mode==='title'){
     if(!titleMenu){titleConfirm();return;}
     const r=cv.getBoundingClientRect(),y=(e.clientY-r.top)/r.height*SH;
-    for(let i=0;i<MENU.length;i++)if(y>=MENU_Y+i*14-5&&y<MENU_Y+i*14+9){titleSel=i;titleConfirm();return;}
+    for(let i=0;i<MENU.length;i++)if(y>=menuY()+i*14-5&&y<menuY()+i*14+9){titleSel=i;titleConfirm();return;}
   }else if(mode==='intro'){audioOn();advanceIntro();}
 });
 $('#capSkip').addEventListener('click',()=>{if(mode==='intro')endIntro();});

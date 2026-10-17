@@ -70,12 +70,6 @@ VARIANT.dean=ch=>ch===12?'deanMark':null;
 VARIANT.sam=ch=>ch===9?'samBlood':null;
 LOOKVAR.dean=ch=>ch===12?'deanMark':null;
 LOOKVAR.ruby=ch=>ch>=8?'ruby2':null;
-Object.assign(WEAK,{
-  dm:Object.assign(WEAK.dm,{rubyknife:2.2}),meg:Object.assign(WEAK.meg,{rubyknife:1.8}),ac:Object.assign(WEAK.ac,{rubyknife:2.2}),
-  hh:{holy:1.4,rubyknife:1.6,blade:1.3},an:{blade:1.6,smite:.6},dk:{smite:1.4,holy:1.2},
-  pride:{holy:1.6,rubyknife:1.8,blade:1.3,smite:1.4},lilith:{rubyknife:1.4,holy:1.3},lilith2:{rubyknife:1.4,holy:1.3,smite:1.3},
-  alastair:{holy:1.4,smite:1.5,rubyknife:1.5},abaddon:{blade:1.6,holy:1.3},lucicas:{smite:.8},amara:{smite:1.3},
-});
 Object.assign(FOE_NAME,{hh:'CÃO DO INFERNO',hm:'MORADOR',an:'ANJO',dk:'CONTAMINADO'});
 Object.assign(ENEMYDEF,{
   hh:{ai:'vp',hp:40,look:()=>DEMONS[0],spd:[50,58],dmg:11,hound:true,demon:true},

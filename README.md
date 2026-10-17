@@ -50,7 +50,9 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Controle no ar | Dá para ajustar a direção durante o pulo |
 | Tiro | Cada caçador tem o seu, com recarga (tabela abaixo) |
 | Magia | Usa os sacos de sal juntados (até 4). Quanto mais sacos, mais forte |
-| Fraquezas | Sal e ferro contra espíritos, lâminas contra vampiros, água benta e lâmina angelical contra demônios |
+| Fraquezas da série | Qualquer caçador fere qualquer criatura, mas cada uma tem as fraquezas da série: sal e ferro contra fantasmas; facão e lâminas contra vampiros; faca da Ruby, lâmina angelical, água benta e exorcismo contra demônios; só a faca da Ruby e a lâmina angelical contra cães do inferno; só a lâmina angelical contra anjos. Fora disso, o dano cai pela metade. Na tela, FRAQUEZA marca o golpe certeiro e RESISTE marca a arma errada |
+| Especialistas | Dean (fantasmas), John (vampiros: o sangue de morto ainda corta a regeneração deles), Bobby e Sam (demônios), Castiel (demônios, anjos e vampiros), Ruby (demônios e cães). O especialista aparece marcado na escolha do caçador, e os cães do inferno não atacam o Crowley |
+| Diário do John | No menu: cada criatura encontrada, com as fraquezas e o melhor caçador contra ela |
 | O Colt | No capítulo 4, os golpes só quebram o controle do Azazel. Quando a barra zera, o espírito do John segura o demônio e o TIRO vira o tiro do Colt. Jogando com o John, ele mesmo segura e o Dean atira, como na série |
 | Itens | Sacos de sal, torta e hambúrguer, que saem das latas de lixo e dos inimigos |
 | Vidas | 3 vidas e tela de "Continuar?" com contagem regressiva |
@@ -130,6 +132,7 @@ winchester/
 │   ├── capitulos.js  # estado, treino, capítulos, fases e textos da história
 │   ├── entrada.js    # teclado, toque e controle
 │   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
+│   ├── fraquezas.js  # fraquezas de cada criatura, especialistas e o Diário do John
 │   ├── conteudo.js   # capítulos 3 a 8: personagens, chefes, poderes, cenas e os dois finais
 │   ├── quadro.js     # atualização de cada quadro e desenho da fase
 │   ├── telas.js      # tela inicial, abertura, menus e telas de história

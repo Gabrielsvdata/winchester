@@ -142,7 +142,7 @@ function heroCards(C){
   const isNew=id=>(C.newcomers||[]).some(n=>n.id===id);
   return C.heroes.map(id=>{const H=heroFor(id),st=H.stats,nw=isNew(id);
     const nm=id==='john'&&chapter===5?'JOHN (ESPÍRITO)':H.name;
-    return`<button class="card${nw?' isnew':''}" data-act="pick" data-id="${id}" type="button"><canvas width="72" height="72" data-pv="${id}"></canvas><div class="info">${nw?'<span class="tag">NOVO</span>':''}<div class="nm">${nm}</div>
+    return`<button class="card${nw?' isnew':''}" data-act="pick" data-id="${id}" type="button"><canvas width="72" height="72" data-pv="${id}"></canvas><div class="info">${nw?'<span class="tag">NOVO</span>':''}${specialTag(id,chapter)}<div class="nm">${nm}</div>
     <div class="stat">Força <i style="--v:${st.forca}"></i></div><div class="stat">Velocidade <i style="--v:${st.vel}"></i></div><div class="stat">Tiro <i style="--v:${st.tiro}"></i></div><div class="stat">Magia <i style="--v:${st.magia}"></i></div>
     <div class="ln">Arma: <b>${H.wName}</b></div><div class="ln">Tiro: <b>${H.gunName}</b></div><div class="ln">Magia: <b>${H.magicName.toLowerCase().replace(/^./,m=>m.toUpperCase())}</b></div>${H.note?`<div class="ln">${H.note}</div>`:''}</div></button>`;}).join('');
 }
@@ -159,7 +159,7 @@ function chapterIntro(n,seen){
   if(!C.heroes.includes(hero))hero=C.heroes[0];
   const nc=(C.newcomers||[]).map(k=>`<div class="newhero"><canvas width="72" height="72" data-pv="${k.id}"></canvas><div class="nh"><span class="tag">ENTRA NA EQUIPE</span><span class="nm">${k.label}</span><p>${k.why}</p></div></div>`).join('');
   const A=ARCS[arcOf(n)],first=phaseOf(n)===1;
-  show(`<div class="box">${first?`<p class="eyebrow">CAPITULO ${arcOf(n)} · ${A.season}</p><h2>${pf(A.title)}</h2>${A.intro?`<p class="txt">${A.intro}</p>`:''}`:''}<p class="eyebrow">${A.stages.length>1?'FASE '+phaseOf(n)+' · ':''}${pf(C.title)}</p><h2>${pf(C.place)}</h2><p class="txt" id="tw"></p>${nc}<p class="sub">${C.tip}</p>
+  show(`<div class="box">${first?`<p class="eyebrow">CAPITULO ${arcOf(n)} · ${A.season}</p><h2>${pf(A.title)}</h2>${A.intro?`<p class="txt">${A.intro}</p>`:''}`:''}<p class="eyebrow">${A.stages.length>1?'FASE '+phaseOf(n)+' · ':''}${pf(C.title)}</p><h2>${pf(C.place)}</h2><p class="txt" id="tw"></p>${nc}<p class="sub">${C.tip}</p><p class="sub">${weakTip(n)}</p>
     <p class="eyebrow">ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint}</p></div>`);
   typeText($('#tw'),C.intro);
   paintPortraits();
