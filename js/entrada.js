@@ -10,7 +10,7 @@ addEventListener('keydown',e=>{
   if(['play','title','intro'].includes(mode)&&(e.code.startsWith('Arrow')||e.code==='Space'))e.preventDefault();
   if(mode==='intro'&&e.code==='Escape'){endIntro();return;}
   if(mode==='title'&&!e.repeat){if(e.code==='ArrowUp'||e.code==='KeyW'){titleNav(-1);return;}if(e.code==='ArrowDown'||e.code==='KeyS'){titleNav(1);return;}}
-  if(e.code==='Escape'||e.code==='KeyP'){if(mode==='play')pause();else if(mode==='pause')resume();return;}
+  if(e.code==='Escape'||e.code==='KeyP'){if(mode==='play')pause();else if(mode==='pause')resume();else if(mode==='vs')vs.paused?(vs.paused=false,hideScreen()):vsPause();return;}
   if(e.repeat)return;
   keys[e.code]=true;
   if(touchMode){touchMode=false;showPad();}

@@ -74,6 +74,8 @@ h2{font-family:var(--f-pixel);font-weight:400;font-size:clamp(14px,3.6vw,20px);l
 .newhero .nm{font-family:var(--f-pixel);font-size:13px;color:var(--amber)}
 .card.isnew{border-color:var(--amber)}
 @media (max-width:520px){.pick{grid-template-columns:1fr}.card{flex-direction:row;flex-wrap:wrap;align-items:center}.card canvas{width:96px;height:96px}.card .info{flex:1;min-width:0}}
+.vsgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.vsc{padding:6px;gap:4px}.vsc canvas{width:96px;height:96px}.vsc .nm{font-size:11px}.vsc .ln{font-size:15px}
+@media (max-width:520px){.vsgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.vsc{flex-direction:column}.vsc canvas{width:72px;height:72px}}
 
 /* Legenda da abertura */
 #cap{position:absolute;z-index:4;box-sizing:border-box;padding:12px 14px;background:var(--void);display:flex;flex-direction:column;gap:6px}
@@ -128,6 +130,7 @@ h2{font-family:var(--f-pixel);font-weight:400;font-size:clamp(14px,3.6vw,20px);l
 <script src="js/visual.js"></script>
 <script src="js/quadro.js"></script>
 <script src="js/telas.js"></script>
+<script src="js/versus.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/main.js"></script>
 </body>

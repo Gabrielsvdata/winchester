@@ -9,7 +9,8 @@ function frame(now){
     if(mode==='title'){if(ny&&ny!==navPrev)titleNav(ny);if(inp.atk||inp.jump||inp.shoot||inp.magic)titleConfirm();}
     else{introT+=dt;updIntro(dt);if(inp.atk||inp.jump)advanceIntro();}
     navPrev=ny;}
-  else if(['story','select','controls'].includes(mode)){titleCam+=dt*18;cam.x=(Math.sin(titleCam/500)*.5+.5)*(STAGE_W-SW);}
+  else if(mode==='vs')vsFrame(dt);
+  else if(['story','select','controls','vssel','vsover'].includes(mode)){titleCam+=dt*18;cam.x=(Math.sin(titleCam/500)*.5+.5)*(STAGE_W-SW);}
   render();
   requestAnimationFrame(frame);
 }

@@ -104,6 +104,7 @@ function floatMsg(t,x,y){msgs.push({t,x,y,life:1});}
 /* ============ Render ============ */
 function render(){
   c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;
+  if((mode==='vs'||mode==='vsover')&&vs&&vs.a){renderVS();return;}
   const sx=Math.round(rand(-shake,shake)),sy=Math.round(rand(-shake,shake)*.6);
   const cx=Math.round(cam.x);
   c.drawImage(layers.sky,0,0);
@@ -247,6 +248,6 @@ function hud(){
 const scr=$('#screen');
 function show(html){scr.innerHTML=html;trDom(scr);scr.hidden=false;scr.scrollTop=0;const f=scr.querySelector('.go,.card');if(f)f.focus({preventScroll:true});}
 function hideScreen(){scr.hidden=true;scr.innerHTML='';}
-function showPad(){$('#pad').hidden=!(touchMode&&(mode==='play'||mode==='continue'));layout();}
+function showPad(){$('#pad').hidden=!(touchMode&&(mode==='play'||mode==='continue'||mode==='vs'));layout();}
 let typing=null;
 function typeText(el,full){full=tr(full);if(typing)clearInterval(typing);let i=0;el.textContent='';typing=setInterval(()=>{i+=1;el.textContent=full.slice(0,i);if(i>=full.length){clearInterval(typing);typing=null;}},26);el.dataset.full=full;}

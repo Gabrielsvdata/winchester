@@ -36,6 +36,15 @@ Na transição entre fases, cada personagem novo é apresentado com o motivo de 
 
 O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera os capítulos já alcançados.
 
+### Lutas dos Sonhos
+
+Um modo à parte, fora da história: as lutas que a série nunca mostrou, um contra um contra o computador, em melhor de 3 rounds de 60 segundos. São 12 lutadores: Dean, Sam, Castiel, Crowley, Lúcifer, Miguel, Gabriel, Rafael, Amara, Chuck, Jack e a Morte. Há também seis duelos clássicos prontos, como Miguel x Lúcifer em Stull e Amara x Chuck no parque.
+
+- **Especial (TIRO):** cada lutador tem o seu. A espingarda de sal do Dean, a onda psíquica do Sam, o teletransporte do Castiel, o cão do inferno do Crowley, o estalo de fogo do Lúcifer, o fogo sagrado do Miguel, a ilusão do Gabriel, o raio do Rafael, os tentáculos da Amara, as páginas do Chuck, o raio de graça do Jack e a foice da Morte.
+- **Supergolpe (MAGIA):** a barra enche batendo e apanhando. Quando dispara, a luta congela e o retrato do lutador corta a tela. Fúria da Marca, Poder do Sangue, Punição Divina com as asas, o Contrato, Fogo do Inferno, Espada do Arcanjo, Trapaça Final com chuva de doces, Tempestade, Eclipse (a tela apaga e só sobram os olhos), Reescrever (o papel cobre a tela e inverte os controles do adversário), Explosão Nefilim (custa vida ao Jack) e o Toque da Morte (a cor some da tela).
+- **Defesa:** segurar para baixo defende, e só os supergolpes atravessam a guarda.
+- **Golpe final:** no fim do último round o perdedor fica tonto e aparece "ACABE COM ELE!". Cada lutador tem o seu: Miguel joga na Jaula, Lúcifer queima, Amara apaga a luz, Chuck apaga o personagem, a Morte ceifa a alma.
+
 ### Mecânicas
 
 | Mecânica | Como funciona |
@@ -144,6 +153,7 @@ winchester/
 │   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
 │   ├── extras.js     # temas de cada capítulo, falas, recordes e cenas de fim de fase
 │   ├── visual.js     # roupas, olhos, rastro dos golpes, mortes, assinatura das magias e luz
+│   ├── versus.js     # Lutas dos Sonhos: modo um contra um com 12 lutadores
 │   ├── i18n.js       # tradução para o inglês
 │   ├── fraquezas.js  # fraquezas de cada criatura, especialistas e o Diário do John
 │   ├── conteudo.js   # capítulos 3 a 8: personagens, chefes, poderes, cenas e os dois finais

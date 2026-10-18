@@ -4,7 +4,7 @@ let titleMenu=false,titleSel=0,logoCv=null,lightT=0,boltX=0,rain=[];
 const flick=new Array(10).fill(0);
 const IN_PORTFOLIO=location.pathname.indexOf('/jogos/')===0;
 let MENU=[];
-function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'DIÁRIO DO JOHN',act:()=>diaryScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});MENU.push({label:lang==='pt'?'ENGLISH':'PORTUGUÊS',act:()=>{setLang(lang==='pt'?'en':'pt');buildMenu();titleSel=Math.min(titleSel,MENU.length-1);}});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
+function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'LUTAS DOS SONHOS',act:()=>vsSelectScreen(1)});MENU.push({label:'DIÁRIO DO JOHN',act:()=>diaryScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});MENU.push({label:lang==='pt'?'ENGLISH':'PORTUGUÊS',act:()=>{setLang(lang==='pt'?'en':'pt');buildMenu();titleSel=Math.min(titleSel,MENU.length-1);}});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
 const MENU_Y=166;
 const menuY=()=>MENU_Y-Math.max(0,MENU.length-3)*14;
 function titleScreen(){buildMenu();layers=getLayers(1);mode='title';hideScreen();$('#cap').hidden=true;titleMenu=false;titleSel=0;showPad();playSong('title');}
