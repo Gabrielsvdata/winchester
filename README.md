@@ -116,6 +116,11 @@ Sem engine, sem bibliotecas e sem imagens: só HTML, CSS e JavaScript, com o có
 
 - **Gráficos:** HTML5 Canvas em 320×224, a resolução do Mega Drive, ampliado sem suavização. Os personagens são bonecos com esqueleto (quadril, joelhos, ombros, cotovelos) desenhados pixel a pixel a cada quadro, com contorno, rotação ao cair e efeito de falha nos fantasmas.
 - **Cenário:** 4 fases com camadas de parallax geradas por código: estrada e ponte de Jericho, fazenda e celeiro sob lua vermelha, pilhas de carros do ferro-velho e o cemitério com o Portão do Diabo. Cada fase tem seu clima: chuva em Jericho, vaga-lumes na fazenda, cinzas no ferro-velho e brasas saindo do Portão.
+- **Acabamento:** sobretudo do Castiel e do Crowley balançando com o movimento, gola na jaqueta do Dean e do John, sobrancelha e boca nos rostos, e olhos que brilham no escuro (amarelos no Azazel, vermelhos nos vampiros e no Lúcifer, brancos na Lilith e no Alastair).
+- **Golpes:** rastro da arma em cada golpe, com a cor da arma, e impacto diferente por arma: pó de sal, faísca de ferro, vapor da água benta queimando demônio, sangue escuro na lâmina.
+- **Mortes como na série:** o demônio brilha em laranja por dentro e solta a fumaça preta pela boca; o anjo morre numa explosão de luz e deixa as asas queimadas no chão; o fantasma queima.
+- **Magias com assinatura:** as asas do Castiel (e as douradas do Jack) se abrem atrás dele, o selo vermelho do contrato aparece sob o Crowley, e o poder do Sam espalha ondas.
+- **Luz dinâmica:** o cenário escurece de leve, e tiros, magias e explosões iluminam em volta.
 - **Efeitos:** cada chefe tem o seu poder de área com aviso no chão na cor dele (telecinese amarela do Azazel, coluna de luz branca da Lilith, coluna de fogo do Lúcifer, raio vermelho do Lúcifer no Castiel, tentáculos negros da Amara, o X de tinta do Chuck). As magias dos caçadores ganharam colunas de luz, raios e o redemoinho do John. Os bonecos têm luz e sombra, com borda clara do lado da luz e escura do outro. Também há rastro nos golpes rápidos, poeira ao correr e cair, anel de impacto nos golpes que derrubam.
 - **Motor:** a lógica roda em passo fixo de 60 por segundo, então o jogo tem a mesma velocidade em telas de 60, 120 ou 144 Hz.
 - **Combate:** máquina de estados por personagem, caixas de acerto com profundidade (eixo y) e altura (eixo z), pausa no impacto, quique ao cair e um sistema que limita quantos inimigos atacam ao mesmo tempo.
@@ -138,6 +143,7 @@ winchester/
 │   ├── entrada.js    # teclado, toque e controle
 │   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
 │   ├── extras.js     # temas de cada capítulo, falas, recordes e cenas de fim de fase
+│   ├── visual.js     # roupas, olhos, rastro dos golpes, mortes, assinatura das magias e luz
 │   ├── i18n.js       # tradução para o inglês
 │   ├── fraquezas.js  # fraquezas de cada criatura, especialistas e o Diário do John
 │   ├── conteudo.js   # capítulos 3 a 8: personagens, chefes, poderes, cenas e os dois finais

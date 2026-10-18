@@ -70,6 +70,7 @@ const GHOSTS=[
 ];
 const SCREAMER={skin:'#c6d8e4',hair:'#141420',style:'woman',jacket:'#7a8ca4',jacketD:'#56647a',shirt:'#a8b8cc',dress:'#8a9cb4',dressD:'#5a6a82',skirt:true,eye:'#000',boots:'#000',tall:1};
 
+const PUP={hx:0,hy:0};
 function drawPuppet(g,L,P){
   g.clearRect(0,0,BUF,BUF);
   const T=L.tall||0,th=10+T*.4,sh=10+T*.4,tor=17+T*.5,ua=8,fa=8;
@@ -86,8 +87,12 @@ function drawPuppet(g,L,P){
   if(L.plaid){for(let y=Math.round(neckY+5);y<hipY-1;y+=3){const k=(hipY-y)/(hipY-neckY),x=hipX+(neckX-hipX)*k;px(g,x-4,y,9,1,L.plaid);}for(let d=-3;d<=3;d+=3)limb(g,hipX+d,hipY-3,neckX+d,neckY+4,1,L.plaid);}
   limb(g,hipX+2,hipY-3,neckX+2,neckY+5,3,L.shirt);
   if(L.tie)limb(g,hipX+2,hipY-6,neckX+2,neckY+5,1,L.tie);
+  if(L.coat){ // sobretudo que balança com o movimento
+    const sw=-(P.lean||0)*1.1+Math.sin((P.flow||0)*1.4)*1.3,top=Math.round(hipY-7),hem=Math.round(hipY+(L.coatLen||13)),dk=shade(L.coat,-.3);
+    for(let y=top;y<=hem;y++){const k=(y-top)/(hem-top),x0=Math.round(hipX-5-k*2+sw*k-(P.lean||0)*(1-k)*.5),x1=Math.round(hipX+5+k*1.5+sw*k);g.fillStyle=L.coat;g.fillRect(x0,y,x1-x0,1);g.fillStyle=dk;g.fillRect(x0,y,1,1);if(y>hem-2)g.fillRect(x0,y,x1-x0,1);}}
   if(!L.skirt){px(g,hipX-4,hipY-3,9,2,'#1a1410');leg(P.fl,L.pants);}
-  const hx=neckX+1,hy=neckY-4;
+  const hx=neckX+1,hy=neckY-4;PUP.hx=hx;PUP.hy=hy;
+  if(L.collar){px(g,neckX-2,neckY+1,5,2,L.collar);px(g,neckX+2,neckY+2,2,2,shade(L.collar,-.3));}
   if(L.style==='woman'){px(g,hx-6,hy-3,5,15,L.hair);}
   disc(g,hx,hy,4,L.skin);px(g,hx-4,hy,1,3,shade(L.skin,-.3));px(g,hx-2,hy+3,4,1,shade(L.skin,-.22));px(g,hx+1,hy-3,2,1,shade(L.skin,.25));
   g.fillStyle=L.hair;
@@ -99,6 +104,7 @@ function drawPuppet(g,L,P){
   if(L.style!=='cap')px(g,hx-1,hy-5,4,1,shade(L.hair,.35));
   if(P.mouth){px(g,hx+1,hy+1,3,3,'#000');if(L.fangs){px(g,hx+1,hy+1,1,1,'#fff');px(g,hx+3,hy+1,1,1,'#fff');}}
   if(L.beard){px(g,hx-1,hy+2,5,2,L.beard);px(g,hx-3,hy,2,3,L.beard);}
+  px(g,hx+1,hy-3,3,1,shade(L.hair,-.15));px(g,hx+1,hy+2,2,1,shade(L.skin,-.35));
   px(g,hx+2,hy-1,1,2,L.eye||'#1a1010');
   if(L.eye==='#000'){px(g,hx+1,hy-1,2,2,'#000');}
   const f=arm(P.fa,L.jacket);
@@ -118,7 +124,7 @@ function blit(x,y,face,o){
   for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1]])c.drawImage(sil,-OX+dx,-OY+dy);
   if(o.glitch){for(let y0=0;y0<BUF;y0+=4){const off=Math.random()<o.glitch?Math.round(rand(-4,4)):0;c.drawImage(buf,0,y0,BUF,4,-OX+off,-OY+y0,BUF,4);}}
   else c.drawImage(buf,-OX,-OY);
-  if(o.flash>0){silhouette(sg2,'#ffffff');c.globalAlpha=(o.alpha==null?1:o.alpha)*.85;c.drawImage(sil2,-OX,-OY);}
+  if(o.flash>0){silhouette(sg2,o.flashCol||'#ffffff');c.globalAlpha=(o.alpha==null?1:o.alpha)*.85;c.drawImage(sil2,-OX,-OY);}
   c.restore();
 }
 

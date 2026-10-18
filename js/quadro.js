@@ -31,7 +31,7 @@ function update(dt){
       score+=50;}}
   items=items.filter(i=>!i.dead&&(i.t<25||i.type==='mem'));
   if(invertT>0)invertT-=dt;
-  for(const f of fxs)f.t+=dt;fxs=fxs.filter(f=>f.t<f.dur);
+  for(const f of fxs)f.t+=dt;updFx2(dt);fxs=fxs.filter(f=>f.t<f.dur);
   updBubbles(dt);if(P.quipT>0){P.quipT-=dt;if(P.quipT<=0)quip('start');}if(P.quipWin>0){P.quipWin-=dt;if(P.quipWin<=0)quip('win');}
   for(const d of decals)d.life-=dt;decals=decals.filter(d=>d.life>0);
   ents=ents.filter(e=>!e.dead);props=props.filter(p=>!p.dead);
@@ -135,6 +135,7 @@ function render(){
     c.globalAlpha=1;}
   c.globalAlpha=1;
   all.sort((a,b)=>a.y-b.y);
+  drawFx2(cx,true);
   for(const e of all){
     if(e.dead)continue;
     const x=e.x-cx,y=e.y-e.z;
@@ -154,11 +155,11 @@ function render(){
     const ghost=!!e.ghost;
     let glitch=0;if(ghost){glitch=['vanish','appear','bout','bin'].includes(e.st)?.7:e.st==='dying'?.9:Math.random()<.04?.5:0;}
     const spirit=e.kind==='player'&&hero==='john'&&chapter===5;
-    blit(x,y+yo,e.face,spirit?{outline:'#9fd8ff',alpha:.88,rot,glitch:Math.random()<.05?.4:0,flash:e.flash}:{outline:ghost?(e.isBoss?'#ffffff':'#7fd8f0'):(e.outline||'#07060d'),alpha:ghost?(e.alpha??1)*(e.isBoss?.95:.86):(e.alpha??1),rot,glitch,flash:e.flash});
-    if(e.type==='azazel'&&!rot){c.globalAlpha=.45+.3*Math.sin(e.t*6);px(c,x+e.face*3-2,y-49,5,4,'#ffd400');c.globalAlpha=1;}
+    blit(x,y+yo,e.face,spirit?{outline:'#9fd8ff',alpha:.88,rot,glitch:Math.random()<.05?.4:0,flash:e.flash}:{outline:ghost?(e.isBoss?'#ffffff':'#7fd8f0'):(e.outline||'#07060d'),alpha:ghost?(e.alpha??1)*(e.isBoss?.95:.86):(e.alpha??1),rot,glitch,flash:e.flash,flashCol:e.flashCol});
+    if(!rot)eyeGlow(e,L,x,y+yo);
     if(['windup','cwind','swind','bwind','lwind','pinw','jwind','summon','cast'].includes(e.st)||(e.st==='throw'&&e.stT<.5)||(e.st==='scream'&&e.stT<.55)){if(Math.floor(e.t*12)%2)px(c,x-1,y-58,3,6,'#ff4a3a');}
   }
-  drawFx(cx);drawBubbles(cx);
+  drawFx(cx);drawFx2(cx,false);drawBubbles(cx);
   // projéteis
   for(const q of projs){const x=Math.round(q.x-cx),y=Math.round(q.y-q.z);
     if(q.kind==='bullet'){px(c,x-3,y,6,1,'#ffe08a');px(c,x+(q.vx>0?2:-3),y,2,1,'#fff');}
@@ -188,6 +189,7 @@ function render(){
   fg(cx);
   c.setTransform(1,0,0,1,0,0);
   drawAmb();
+  drawLighting(cx);
   if(P.hp<30&&P.hp>0&&mode==='play'){const a=.25+.2*Math.sin(performance.now()/140);c.globalAlpha=a;c.strokeStyle='#c8201a';c.lineWidth=6;c.strokeRect(3,3,SW-6,SH-6);c.globalAlpha=1;}
   if(dimT>0){c.globalAlpha=Math.min(.55,dimT*.6);c.fillStyle=heroFor(hero).mg==='psy'||heroFor(hero).mg==='blood'?'#1a0830':heroFor(hero).mg==='mark'?'#300808':'#000010';c.fillRect(0,0,SW,SH);c.globalAlpha=1;}
   for(const q of parts){if(!q.screen)continue;c.globalAlpha=.9;px(c,q.x,q.y,1,3,q.col);}c.globalAlpha=1;
