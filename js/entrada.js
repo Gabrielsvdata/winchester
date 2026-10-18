@@ -54,6 +54,7 @@ for(const[id,a]of[['bAtk','atk'],['bJmp','jump'],['bSht','shoot'],['bMag','magic
   b.addEventListener('pointerdown',e=>{e.preventDefault();audioOn();edge[a]=1;b.classList.add('on');if(mode==='continue')doContinue();});
   for(const t of['pointerup','pointercancel','pointerleave'])b.addEventListener(t,()=>b.classList.remove('on'));
 }
+{const b=document.getElementById('bEsp');b.addEventListener('pointerdown',e=>{e.preventDefault();audioOn();edge.atk=1;edge.jump=1;b.classList.add('on');});for(const t of['pointerup','pointercancel','pointerleave'])b.addEventListener(t,()=>b.classList.remove('on'));}
 addEventListener('pointerdown',e=>{if(e.pointerType==='touch'&&!touchMode){touchMode=true;showPad();layout();}},true);
 $('#app').addEventListener('pointerdown',e=>{
   if(e.target.closest('button'))return;
@@ -66,5 +67,5 @@ $('#app').addEventListener('pointerdown',e=>{
 $('#capSkip').addEventListener('click',()=>{if(mode==='intro')endIntro();});
 $('#skipTut').addEventListener('click',()=>{if(tut)endTut();});
 $('#pauseBtn').addEventListener('click',()=>{mode==='play'?pause():mode==='pause'&&resume();});
-$('#sndBtn').addEventListener('click',()=>{audioOn();muted=!muted;$('#sndBtn').textContent=muted?'SOM OFF':'SOM ON';if(titleTrack){if(muted)titleTrack.pause();else if(TITLE_MODES.includes(mode)){titleTrack.currentTime=0;playTrack();}}});
+$('#sndBtn').addEventListener('click',()=>{audioOn();muted=!muted;$('#sndBtn').textContent=tr(muted?'SOM OFF':'SOM ON');if(titleTrack){if(muted)titleTrack.pause();else if(TITLE_MODES.includes(mode)){titleTrack.currentTime=0;playTrack();}}});
 

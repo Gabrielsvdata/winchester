@@ -28,7 +28,7 @@ function icon(g,map,pal,x,y){for(let r=0;r<map.length;r++)for(let k=0;k<map[r].l
 const ACC={'Á':'A´','À':'A`','Â':'A^','Ã':'A~','É':'E´','Ê':'E^','Í':'I´','Ó':'O´','Ô':'O^','Õ':'O~','Ú':'U´','Ç':'C,'};
 function accent(k,x,y,u,col){c.fillStyle=col;const r=(a,b,w,h)=>c.fillRect(Math.round(x+a*u),Math.round(y+b*u),Math.max(1,Math.round(w*u)),Math.max(1,Math.round(h*u)));
   if(k==='´'){r(4,-3,2,1);r(3,-2,2,1);}else if(k==='`'){r(2,-3,2,1);r(3,-2,2,1);}else if(k==='^'){r(3,-3,1,1);r(2,-2,1,1);r(4,-2,1,1);}else if(k==='~'){r(1,-2,1,1);r(2,-3,2,1);r(4,-2,1,1);r(5,-3,1,1);}else if(k===','){r(3,7,2,1);r(4,8,1,1);r(2,9,2,1);}}
-function text(s,x,y,col,size,align,shadow){
+function text(s,x,y,col,size,align,shadow){s=tr(s);
   size=size||8;const u=size/8,chars=[...String(s)],w=chars.length*size;
   const x0=Math.round(align==='center'?x-w/2:align==='right'?x-w:x);y=Math.round(y);
   c.font=`${size}px ${FONT}`;c.textAlign='left';c.textBaseline='top';

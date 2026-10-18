@@ -52,6 +52,8 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Magia | Usa os sacos de sal juntados (até 4). Quanto mais sacos, mais forte |
 | Fraquezas da série | Qualquer caçador fere qualquer criatura, mas cada uma tem as fraquezas da série: sal e ferro contra fantasmas; facão e lâminas contra vampiros; faca da Ruby, lâmina angelical, água benta e exorcismo contra demônios; só a faca da Ruby e a lâmina angelical contra cães do inferno; só a lâmina angelical contra anjos. Fora disso, o dano cai pela metade. Na tela, FRAQUEZA marca o golpe certeiro e RESISTE marca a arma errada |
 | Especialistas | Dean (fantasmas), John (vampiros: o sangue de morto ainda corta a regeneração deles), Bobby e Sam (demônios), Castiel (demônios, anjos e vampiros), Ruby (demônios e cães). O especialista aparece marcado na escolha do caçador, e os cães do inferno não atacam o Crowley |
+| Falas | Cada caçador e cada chefe tem frases curtas da série em balão: "Idjits!" do Bobby, "Olá, rapazes" do Crowley, "Lembra de mim, Sammy?" do Azazel |
+| Recordes | Melhor pontuação de cada fase na tela de capítulos, aviso de NOVO RECORDE e contagem de finais vistos |
 | Diário do John | No menu: cada criatura encontrada, com as fraquezas e o melhor caçador contra ela |
 | O Colt | No capítulo 4, os golpes só quebram o controle do Azazel. Quando a barra zera, o espírito do John segura o demônio e o TIRO vira o tiro do Colt. Jogando com o John, ele mesmo segura e o Dean atira, como na série |
 | Itens | Sacos de sal, torta e hambúrguer, que saem das latas de lixo e dos inimigos |
@@ -106,6 +108,8 @@ O progresso fica salvo no navegador, e a opção **Capítulos** do menu libera o
 | Especial | J + K juntos | ATACAR + PULO | X + A |
 | Pausa | Esc ou P | Botão II | Start |
 
+No celular, o botão **ESP.** faz o especial sem precisar apertar dois botões juntos.
+
 ## Como foi feito
 
 Sem engine, sem bibliotecas e sem imagens: só HTML, CSS e JavaScript, com o código dividido em arquivos por assunto (veja a seção Arquivos).
@@ -115,7 +119,8 @@ Sem engine, sem bibliotecas e sem imagens: só HTML, CSS e JavaScript, com o có
 - **Efeitos:** cada chefe tem o seu poder de área com aviso no chão na cor dele (telecinese amarela do Azazel, coluna de luz branca da Lilith, coluna de fogo do Lúcifer, raio vermelho do Lúcifer no Castiel, tentáculos negros da Amara, o X de tinta do Chuck). As magias dos caçadores ganharam colunas de luz, raios e o redemoinho do John. Os bonecos têm luz e sombra, com borda clara do lado da luz e escura do outro. Também há rastro nos golpes rápidos, poeira ao correr e cair, anel de impacto nos golpes que derrubam.
 - **Motor:** a lógica roda em passo fixo de 60 por segundo, então o jogo tem a mesma velocidade em telas de 60, 120 ou 144 Hz.
 - **Combate:** máquina de estados por personagem, caixas de acerto com profundidade (eixo y) e altura (eixo z), pausa no impacto, quique ao cair e um sistema que limita quantos inimigos atacam ao mesmo tempo.
-- **Áudio:** Web Audio API. Efeitos e música da fase são sintetizados em tempo real, com onda de pulso no estilo NES e Mega Drive. A introdução da tela inicial (`audio/abertura.mp3`) é uma progressão de acordes arranjada no estilo YM2612: guitarras FM com saturação, órgão por síntese aditiva, baixo com estalo e bateria no estilo do canal DAC.
+- **Idiomas:** português e inglês, com a opção no menu. O jogo abre no idioma do navegador. Um único dicionário traduz textos, telas e cenas, ignorando acentos e números.
+- **Áudio:** Web Audio API. Cada capítulo tem um tema próprio (ré menor arrastado no Portão do Diabo, o relógio correndo em Um Ano, heroico no Autor), mais um tema para os chefes grandes e outro para os finais, tudo sintetizado na hora. Efeitos e música da fase são sintetizados em tempo real, com onda de pulso no estilo NES e Mega Drive. A introdução da tela inicial (`audio/abertura.mp3`) é uma progressão de acordes arranjada no estilo YM2612: guitarras FM com saturação, órgão por síntese aditiva, baixo com estalo e bateria no estilo do canal DAC.
 - **Entrada:** teclado, toque (analógico e botões) e Gamepad API.
 - **Textos:** a fonte de pixel não tem maiúsculas acentuadas, então os acentos são desenhados à mão por cima das letras.
 
@@ -132,6 +137,8 @@ winchester/
 │   ├── capitulos.js  # estado, treino, capítulos, fases e textos da história
 │   ├── entrada.js    # teclado, toque e controle
 │   ├── combate.js    # golpes, jogador, inimigos, chefes e ondas
+│   ├── extras.js     # temas de cada capítulo, falas, recordes e cenas de fim de fase
+│   ├── i18n.js       # tradução para o inglês
 │   ├── fraquezas.js  # fraquezas de cada criatura, especialistas e o Diário do John
 │   ├── conteudo.js   # capítulos 3 a 8: personagens, chefes, poderes, cenas e os dois finais
 │   ├── quadro.js     # atualização de cada quadro e desenho da fase

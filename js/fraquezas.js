@@ -25,7 +25,8 @@ const CLASSINFO={
 function weakMult(b,tag){
   const cl=CLS[b.type];if(!cl)return 1;
   const W=WEAKNESS[cl];let m=W[tag]!=null?W[tag]:W._;
-  const S=SPECIAL[hero];if(S&&S[cl])m=Math.max(m,1)*S[cl]; // o especialista nunca resiste à criatura que caça
+  const S=SPECIAL[hero];if(S&&S[cl])m=Math.max(m,1)*S[cl];
+  if(b.isBoss&&m<1)m=Math.max(.8,1+(m-1)*.5); // chefes resistem só pela metade: ninguém fica preso numa luta sem fim // o especialista nunca resiste à criatura que caça
   return m;
 }
 // avisa o jogador quando o golpe acerta uma fraqueza ou quando a criatura resiste
@@ -41,7 +42,7 @@ function noteCreature(type){const cl=CLS[type];if(!cl||diario[cl])return;diario[
 // criatura mais comum de uma fase
 function mainClass(n){const k={};for(const z of CHAPTERS[n].zones)for(const w of z.waves||[])for(const t of w){const c=CLS[t];if(c)k[c]=(k[c]||0)+1;}let best=null;for(const c in k)if(!best||k[c]>k[best])best=c;return best;}
 function weakTip(n){const cl=mainClass(n);if(!cl)return '';const I=CLASSINFO[cl];return `<b>${pf(I.nome)}:</b> ${I.diario} <b>Especialista:</b> ${I.quem}.`;}
-function specialTag(id,n){const cl=mainClass(n),S=SPECIAL[id];return cl&&S&&S[cl]?`<span class="tag spec">ESPECIALISTA EM ${pf(CLASSINFO[cl].nome)}</span>`:'';}
+function specialTag(id,n){const cl=mainClass(n),S=SPECIAL[id];return cl&&S&&S[cl]?`<span class="tag spec">ESPECIALISTA EM <span>${pf(CLASSINFO[cl].nome)}</span></span>`:'';}
 function diaryScreen(){
   mode='controls';layers=getLayers(1);
   const rows=Object.keys(CLASSINFO).map(cl=>{const I=CLASSINFO[cl];return diario[cl]?`<dt>${pf(I.nome)}</dt><dd>${I.diario} <b>Melhor caçador:</b> ${I.quem}.</dd>`:`<dt>???</dt><dd>Você ainda não encontrou esta criatura.</dd>`;}).join('');

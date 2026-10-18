@@ -4,7 +4,7 @@ let titleMenu=false,titleSel=0,logoCv=null,lightT=0,boltX=0,rain=[];
 const flick=new Array(10).fill(0);
 const IN_PORTFOLIO=location.pathname.indexOf('/jogos/')===0;
 let MENU=[];
-function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'DIÁRIO DO JOHN',act:()=>diaryScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
+function buildMenu(){MENU=[{label:'NOVO JOGO',act:()=>chapterIntro(1)}];if(progress>1)MENU.push({label:'CAPÍTULOS',act:()=>chaptersScreen()});MENU.push({label:'DIÁRIO DO JOHN',act:()=>diaryScreen()});MENU.push({label:'CONTROLES',act:()=>controlsScreen()});MENU.push({label:lang==='pt'?'ENGLISH':'PORTUGUÊS',act:()=>{setLang(lang==='pt'?'en':'pt');buildMenu();titleSel=Math.min(titleSel,MENU.length-1);}});if(IN_PORTFOLIO)MENU.push({label:'VOLTAR AO PORTFÓLIO',act:()=>{location.href='/';}});}
 const MENU_Y=166;
 const menuY=()=>MENU_Y-Math.max(0,MENU.length-3)*14;
 function titleScreen(){buildMenu();layers=getLayers(1);mode='title';hideScreen();$('#cap').hidden=true;titleMenu=false;titleSel=0;showPad();playSong('title');}
@@ -18,9 +18,9 @@ function controlsScreen(){
       <dt>ATACAR</dt><dd>J ou Z. Aperte em sequência para o combo de 3 golpes.</dd>
       <dt>PULAR</dt><dd>K, X ou Espaço. Ataque no ar para a voadora.</dd>
       <dt>TIRO</dt><dd>L ou C. Tem tempo de recarga.</dd>
-      <dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal. Cada caçador tem a sua: círculo de sal (Dean), onda psíquica (Sam), facão giratório (John), Armadilha do Diabo (Bobby) e punição divina (Castiel). Mais sacos, mais força.</dd>
-      <dt>ESPECIAL</dt><dd>Ataque e pulo juntos (J + K, ou os dois botões no celular). Golpe giratório que afasta quem estiver em volta. Custa um pouco de vida.</dd>
-      <dt>COLT</dt><dd>No capítulo 4, quando o espírito do John segurar Azazel, aperte TIRO.</dd>
+      <dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal. Cada caçador tem a sua, descrita na escolha do caçador. Mais sacos, mais força.</dd>
+      <dt>ESPECIAL</dt><dd>Ataque e pulo juntos (J + K, ou o botão ESP. no celular). Golpe giratório que afasta quem estiver em volta. Custa um pouco de vida.</dd>
+      <dt>COLT</dt><dd>No Portão do Diabo (capítulo 2), quando o espírito do John segurar Azazel, aperte TIRO.</dd>
       <dt>CELULAR</dt><dd>Analógico à esquerda, botões à direita. Empurre até o fim para correr.</dd>
       <dt>CONTROLE</dt><dd>X ataca, A pula, B atira, Y magia, Start pausa.</dd>
     </dl>
@@ -95,13 +95,13 @@ const L_KID={skin:'#f0c098',hair:'#d8b060',style:'short',jacket:'#4a6a9a',jacket
 const L_SHADOW={skin:'#0c0c10',hair:'#050508',style:'short',jacket:'#0c0c12',jacketD:'#060608',shirt:'#101018',pants:'#0a0a10',pantsD:'#060608',boots:'#000',eye:'#ffd400',tall:2};
 let introI=0,introT=0,introWait=0,cut=[],SCN=[],sceneAfter=null;
 function startIntro(){playScenes(INTRO,()=>{chapter=1;selectScreen();});}
-function playScenes(list,after){SCN=list;sceneAfter=after;hideScreen();mode='intro';introI=-1;playSong('title');nextScene();}
+function playScenes(list,after,song){SCN=list;sceneAfter=after;hideScreen();mode='intro';introI=-1;playSong(song||'title');nextScene();}
 function nextScene(){
   introI++;if(introI>=SCN.length){endIntro();return;}
   introT=0;introWait=0;cut=[];
   const sc=SCN[introI],cap=$('#cap');
   if(sc.sfx)sc.sfx();
-  if(sc.text){cap.hidden=false;$('#capPlace').textContent=sc.place;$('#capHint').textContent=touchMode?'TOQUE PARA SEGUIR':'ENTER PARA SEGUIR';typeText($('#capText'),sc.text);}
+  if(sc.text){cap.hidden=false;$('#capPlace').textContent=tr(sc.place);$('#capHint').textContent=tr(touchMode?'TOQUE PARA SEGUIR':'ENTER PARA SEGUIR');typeText($('#capText'),sc.text);}
   else{cap.hidden=true;if(typing){clearInterval(typing);typing=null;}}
   layout();
 }
@@ -255,17 +255,20 @@ function selectScreen(){
   show(`<div class="box"><p class="eyebrow">${phaseLabel(chapter)} · ESCOLHA SEU CAÇADOR</p><div class="pick">${heroCards(C)}</div><p class="fine">${C.hint} ${weakTip(chapter)}</p></div>`);
   paintPortraits();
 }
-function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p class="eyebrow">PAUSA</p><h2>Respira, caçador.</h2>${touchMode?`<dl class="keys"><dt>MOVER</dt><dd>Analógico. Empurre até o fim para correr.</dd><dt>ATACAR</dt><dd>3 toques seguidos fazem o combo.</dd><dt>PULO</dt><dd>Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>Recarrega sozinho.</dd><dt>MAGIA</dt><dd>Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>ATACAR + PULO juntos: gira e afasta todos. Custa um pouco de vida.</dd></dl>`:`<dl class="keys"><dt>MOVER</dt><dd>Setas ou WASD. Toque duas vezes para o lado para correr.</dd><dt>ATACAR</dt><dd>J ou Z. Três seguidos fazem o combo.</dd><dt>PULAR</dt><dd>K, X ou Espaço. Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>L ou C. Recarrega sozinho.</dd><dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>J + K juntos: gira e afasta todos. Custa um pouco de vida.</dd></dl>`}<div class="row"><button class="btn go" data-act="resume">▶ CONTINUAR</button><button class="btn" data-act="restart">REINICIAR</button><button class="btn" data-act="title">MENU</button></div></div>`);showPad();}
+function pause(){if(mode!=='play')return;mode='pause';show(`<div class="box"><p class="eyebrow">PAUSA</p><h2>Respira, caçador.</h2>${touchMode?`<dl class="keys"><dt>MOVER</dt><dd>Analógico. Empurre até o fim para correr.</dd><dt>ATACAR</dt><dd>3 toques seguidos fazem o combo.</dd><dt>PULO</dt><dd>Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>Recarrega sozinho.</dd><dt>MAGIA</dt><dd>Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>Botão ESP. (ou ATACAR + PULO juntos): gira e afasta todos. Custa um pouco de vida.</dd></dl>`:`<dl class="keys"><dt>MOVER</dt><dd>Setas ou WASD. Toque duas vezes para o lado para correr.</dd><dt>ATACAR</dt><dd>J ou Z. Três seguidos fazem o combo.</dd><dt>PULAR</dt><dd>K, X ou Espaço. Ataque no ar para a voadora.</dd><dt>TIRO</dt><dd>L ou C. Recarrega sozinho.</dd><dt>MAGIA</dt><dd>I ou V. Usa os sacos de sal.</dd><dt>ESPECIAL</dt><dd>J + K juntos: gira e afasta todos. Custa um pouco de vida.</dd></dl>`}<div class="row"><button class="btn go" data-act="resume">▶ CONTINUAR</button><button class="btn" data-act="restart">REINICIAR</button><button class="btn" data-act="title">MENU</button></div></div>`);showPad();}
 function resume(){hideScreen();mode='play';showPad();}
 function gameOverScreen(){mode='over';showPad();show(`<div class="box"><p class="eyebrow">FIM DE JOGO</p><h2>A estrada venceu desta vez.</h2><p class="sub">${CHAPTERS[chapter].over}</p><div class="row"><button class="btn go" data-act="restart">▶ TENTAR DE NOVO</button><button class="btn" data-act="pickagain">TROCAR CAÇADOR</button></div></div>`);}
+let lastRec=false;
 function endingScreen(){
   mode='ending';showPad();const C=CHAPTERS[chapter],last=chapter===CHAPTERS.length-1;saveProgress(chapter+1);
+  const rec=arguments[0]?lastRec:(lastRec=saveRecord(chapter,score));
+  if(C.outroScenes&&!arguments[0]){playScenes(C.outroScenes,()=>endingScreen(true));return;}
   if(C.choice){choiceScreen();return;}
   const btns=last?`<button class="btn go" data-act="chap" data-n="1" type="button">▶ JOGAR DE NOVO</button><button class="btn" data-act="title" type="button">MENU</button>`
     :`<button class="btn go" data-act="next" type="button">▶ ${arcOf(chapter+1)!==arcOf(chapter)?'CAPITULO '+arcOf(chapter+1):'FASE '+phaseOf(chapter+1)}</button><button class="btn" data-act="restart" type="button">JOGAR DE NOVO</button>`;
   show(`<div class="box"><p class="eyebrow">${last?'WINCHESTER · FIM DO CAPITULO 2':(phaseOf(chapter)===ARCS[arcOf(chapter)].stages.length?'FIM DO CAPITULO '+arcOf(chapter):'FIM DA FASE '+phaseOf(chapter))}</p><h2>${C.outro.h}</h2>
     <p class="txt" id="tw"></p>
-    <p class="sub">Pontos: ${String(score).padStart(6,'0')}</p>
+    <p class="sub">Pontos: ${String(score).padStart(6,'0')}${rec&&score>0?' · NOVO RECORDE':''}</p>
     ${last?'<p class="fine">Os próximos capítulos estão em produção: o ano de Dean, a chegada de Castiel, o Apocalipse e a Jaula.</p>':''}
     <div class="row">${btns}</div></div>`);
   typeText($('#tw'),C.outro.t);
@@ -281,8 +284,8 @@ scr.addEventListener('click',e=>{
   else if(a==='title')titleScreen();
   else if(a==='next')chapterIntro(chapter+1);
   else if(a==='chap')chapterIntro(+b.dataset.n);
-  else if(a==='endA')playScenes(ENDING_ACCEPT,()=>creditsScreen('A'));
-  else if(a==='endB')playScenes(ENDING_TEAR,()=>creditsScreen('B'));
+  else if(a==='endA')playScenes(ENDING_ACCEPT,()=>creditsScreen('A'),'fim');
+  else if(a==='endB')playScenes(ENDING_TEAR,()=>creditsScreen('B'),'fim');
 });
 
 /* ============ Layout ============ */

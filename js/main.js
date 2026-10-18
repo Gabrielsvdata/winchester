@@ -13,5 +13,5 @@ function frame(now){
   render();
   requestAnimationFrame(frame);
 }
-layers=getLayers(1);layout();titleScreen();
+applyStaticLang();layers=getLayers(1);layout();titleScreen();
 (document.fonts&&document.fonts.load?document.fonts.load('8px "Press Start 2P"'):Promise.resolve()).catch(()=>{}).finally(()=>requestAnimationFrame(frame));

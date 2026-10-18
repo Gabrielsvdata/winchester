@@ -8,7 +8,7 @@ function spawnBossDef(k){
   e.st='appear';e.alpha=0;
   banner={l1:D.name,l2:D.sub||'',t:2.8};sfx(D.sfx||'boss');
   if(D.init)D.init(e);
-  ents.push(e);boss=e;playSong('boss');shake=6;
+  ents.push(e);boss=e;playSong(bossSong());shake=6;if(BOSS_QUIPS[k])say(e,BOSS_QUIPS[k],3);
 }
 /* ============ Personagens novos ============ */
 Object.assign(LOOKS,{
@@ -129,12 +129,12 @@ Object.assign(BOSSDEF,{
     pick:(e,near,r)=>near?'bout':r<.45?'cast':r<.75?'pinw':'bout',cast:lightBlast,
     onDie:b=>{banner={l1:'MEIA-NOITE',l2:'O RELÓGIO DE DEAN PAROU',t:3};},
     die:(e,dt)=>{e.alpha=Math.max(0,1-e.stT/1.6);if(Math.random()<.6)parts.push({x:e.x+rand(-8,8),y:e.y,z:rand(0,40),vx:0,vy:0,vz:rand(20,60),life:.6,max:.6,col:'#ffffff',size:2,grav:0});if(e.stT>2.4&&!endT)endT=1.5;}},
-  alastair:{name:'ALASTAIR',sub:'O TORTURADOR DO INFERNO',hp:480,spd:38,outline:'#0c0610',demon:true,trapImmune:true,smoky:true,dist:70,summon:['dm','dm'],sumTxt:'DEMÔNIOS DE ALASTAIR',rage:'A ARMADILHA NÃO SEGURA ALASTAIR',
+  alastair:{name:'ALASTAIR',sub:'O TORTURADOR DO INFERNO',hp:420,spd:38,outline:'#0c0610',demon:true,trapImmune:true,smoky:true,dist:70,summon:['dm','dm'],sumTxt:'DEMÔNIOS DE ALASTAIR',rage:'A ARMADILHA NÃO SEGURA ALASTAIR',
     pick:(e,near,r)=>near?'bwind':r<.5?'throw':'bout',
     fire:(e,p)=>{sfx('swing');proj3(e,p,'blade',190,10,[-12,0,12]);}},
   lilith2:{name:'LILITH',sub:'O ÚLTIMO SELO',hp:540,look:'lilith2',spd:32,outline:'#d8d8e8',demon:true,smoky:true,dist:100,sfx:'scream',summon:['dm','an'],sumTxt:'O CONVENTO SE ENCHE',
     pick:(e,near,r)=>near?(r<.5?'bwind':'bout'):r<.5?'cast':r<.8?'pinw':'bout',cast:lightBlast},
-  war:{name:'GUERRA',sub:'O CAVALEIRO VERMELHO',hp:500,spd:40,dist:70,sfx:'heavy',rage:'A GUERRA SE ESPALHA',
+  war:{name:'GUERRA',sub:'O CAVALEIRO VERMELHO',hp:360,spd:40,dist:70,sfx:'heavy',rage:'A GUERRA SE ESPALHA',
     pick:(e,near,r)=>near?'bwind':r<.45?'lwind':'cast',
     cast:e=>{banner={l1:'TODOS CONTRA TODOS',l2:'',t:1.4,small:true};sfx('scream');spawnEnemy('hm',cam.x+20,rand(LT,LB));spawnEnemy('hm',cam.x+SW-20,rand(LT,LB));},
     onDie:b=>{banner={l1:'O ANEL DA GUERRA',l2:'DEAN CORTA O DEDO DO CAVALEIRO',t:2.8,small:true};}},
@@ -149,19 +149,19 @@ Object.assign(BOSSDEF,{
     fire:(e,p)=>{sfx('fire');proj3(e,p,'redfire',140,12,[-16,0,16]);},
     onDie:b=>{banner={l1:'SAM VOLTOU',l2:'',t:3};},
     die:(e,dt)=>{if(Math.random()<.4)parts.push({x:e.x+rand(-8,8),y:e.y,z:rand(0,46),vx:0,vy:0,vz:rand(20,50),life:.6,max:.6,col:'#9fd8ff',size:2,grav:0});if(e.stT>2.4&&!endT)endT=1.5;}},
-  abaddon:{name:'ABADDON',sub:'A ÚLTIMA CAVALEIRA DO INFERNO',hp:560,spd:42,outline:'#1a0404',demon:true,smoky:true,dist:70,summon:['dm','dm'],sumTxt:'O EXÉRCITO DE ABADDON',rage:'ABADDON PERDE A PACIÊNCIA',
+  abaddon:{name:'ABADDON',sub:'A ÚLTIMA CAVALEIRA DO INFERNO',hp:500,spd:42,outline:'#1a0404',demon:true,smoky:true,dist:70,summon:['dm','dm'],sumTxt:'O EXÉRCITO DE ABADDON',rage:'ABADDON PERDE A PACIÊNCIA',
     pick:(e,near,r)=>near?'bwind':r<.35?'lwind':r<.65?'throw':'bout',
     onDie:b=>{banner={l1:'A PRIMEIRA LÂMINA',l2:'DEAN ACABA COM ABADDON',t:2.8,small:true};}},
-  lucicas:{name:'LÚCIFER',sub:'NO CORPO DE CASTIEL',hp:520,spd:38,outline:'#3a0a06',smoky:true,dist:90,
+  lucicas:{name:'LÚCIFER',sub:'NO CORPO DE CASTIEL',hp:400,spd:38,outline:'#3a0a06',smoky:true,dist:90,
     pick:(e,near,r)=>near?(r<.5?'bwind':'bout'):r<.4?'throw':r<.7?'pinw':'bout',
     fire:(e,p)=>{sfx('fire');proj3(e,p,'redfire',150,12,[-14,0,14]);},
     onDie:b=>{banner={l1:'ROWENA ABRE O FEITIÇO',l2:'LÚCIFER É EXPULSO DO CASTIEL',t:2.8,small:true};}},
-  amara:{name:'AMARA',sub:'A ESCURIDÃO',hp:620,spd:30,outline:'#000000',smoky:true,dist:110,sfx:'boss',summon:['dk','dk'],sumTxt:'A NÉVOA SE ESPALHA',
+  amara:{name:'AMARA',sub:'A ESCURIDÃO',hp:460,spd:30,outline:'#000000',smoky:true,dist:110,sfx:'boss',summon:['dk','dk'],sumTxt:'A NÉVOA SE ESPALHA',
     pick:(e,near,r)=>near?'bout':r<.4?'throw':r<.75?'pinw':'cast',
     fire:(e,p)=>{sfx('smoke');proj3(e,p,'dark',120,12,[-20,-7,7,20]);},
     cast:(e,p)=>{sfx('smoke');shake=6;for(const d of[-1,1])projs.push({kind:'dark',big:true,x:e.x+d*12,y:p.y,z:10,vx:d*130,life:2.6,dmg:13,owner:'e'});},
     onDie:b=>{banner={l1:'CHUCK CHEGA',l2:'IRMÃO E IRMÃ, FRENTE A FRENTE',t:3};}},
-  chuck:{name:'CHUCK',sub:'O AUTOR',hp:720,spd:34,outline:'#3a2a1e',dist:110,sfx:'boss',
+  chuck:{name:'CHUCK',sub:'O AUTOR',hp:480,spd:34,outline:'#3a2a1e',dist:110,sfx:'boss',
     init:e=>{e.phase=0;},
     shield:b=>props.some(q=>q.letter&&!q.dead),shieldTxt:'QUEBRE AS LETRAS',
     hud:b=>{const lt=props.some(q=>q.letter&&!q.dead);return{label:lt?'QUEBRE O "FIM"':'CHUCK, O AUTOR',k:b.hp/b.maxHp,col:'#e8e4d8'};},
@@ -182,7 +182,7 @@ function reprise(){ // Chuck traz de volta inimigos de histórias antigas
 }
 function writeEnd(){ // Chuck escreve FIM na tela
   banner={l1:'FIM',l2:'QUEBRE AS LETRAS PARA CONTINUAR',t:2.4};sfx('boss');flash=.6;
-  ['F','I','M'].forEach((ch,i)=>{const e=newEnt('prop',cam.x+90+i*70,LT+22+(i%2)*18);e.hp=1;e.letter=ch;e.lhp=3;props.push(e);});
+  (lang==='pt'?['F','I','M']:['E','N','D']).forEach((ch,i)=>{const e=newEnt('prop',cam.x+90+i*70,LT+22+(i%2)*18);e.hp=1;e.letter=ch;e.lhp=3;props.push(e);});
 }
 
 /* ============ Capítulos 3 a 8 ============ */
@@ -278,7 +278,7 @@ ARCS.push(
   {title:'UM ANO',season:'TEMPORADA 3',stages:[6,7],
     intro:'Os olhos amarelos se apagaram, mas o Portão do Diabo ficou aberto tempo demais. Centenas de demônios andam soltos. E Dean tem só um ano antes de os cães do inferno virem buscá-lo.',
     scenes:[
-      sc('A ESTRADA · 2007','Os olhos amarelos se apagaram, mas o Portão do Diabo ficou aberto tempo demais. Centenas de demônios andam soltos pelo mundo.',mkScene({stage:6,cx:40,impala:[60,138],chars:[['dean',200,-1],['sam',226,-1]]})),
+      sc('A ESTRADA · 2007','Os olhos amarelos se apagaram, mas o Portão do Diabo ficou aberto tempo demais. Centenas de demônios andam soltos pelo mundo.',mkScene({stage:6,cx:40,impala:[-120,138,90,2],chars:[['dean',200,-1],['sam',226,-1]]})),
       sc('O RELÓGIO','E Dean tem só um ano. Quando o prazo acabar, os cães do inferno vêm buscar a alma dele. Sam promete que vai achar um jeito de quebrar o pacto.',mkScene({stage:6,cx:300,chars:[['dean',140,1],['sam',176,-1]],fx:['clock']})),
     ]},
   {title:'OS SELOS',season:'TEMPORADA 4',stages:[8,9],
@@ -287,15 +287,15 @@ ARCS.push(
       sc('O INFERNO','Quatro meses na Terra são quarenta anos no inferno. Por trinta, Dean resistiu às torturas de Alastair. Depois, quebrou.',mkScene({void:'#2a0606',chars:[['dean',160,1,'hurt']],fx:['chains','hellfire']})),
       sc('PONTIAC, ILLINOIS','Uma mão rompe a terra de uma cova rasa. Dean sai vivo, sem um arranhão, no meio de uma clareira de árvores derrubadas em círculo.',mkScene({stage:8,cx:150,chars:[['dean',118,1,'getup']],fx:['grave']})),
       sc('UM CELEIRO, DIAS DEPOIS','Dean e Bobby enchem um celeiro de armadilhas e invocam o que o tirou do inferno. As portas se abrem sozinhas, e as lâmpadas estouram uma a uma.',mkScene({stage:8,cx:1500,chars:[['dean',120,1],['bobby',96,1],['cas',230,-1]],fx:['sparks']})),
-      sc('O CELEIRO','Por um instante, a sombra de duas asas enormes cobre as paredes. "Eu sou aquele que te agarrou firme e te tirou da perdição." O nome dele é Castiel. É um anjo do Senhor.',mkScene({stage:8,cx:1500,chars:[['dean',130,1],['cas',200,-1]],fx:['wings']})),
+      sc('O CELEIRO','Por um instante, a sombra de duas asas enormes cobre as paredes. "Eu sou aquele que te agarrou firme e te tirou da perdição." O nome dele é Castiel. É um anjo do Senhor.',mkScene({stage:8,cx:1500,chars:[['dean',130,1],['cas',240,-1,'walk',-14,0,3]],fx:['wings']})),
       sc('OS 66 SELOS','Lilith quer quebrar 66 selos para libertar Lúcifer da Jaula. No meio da guerra, os irmãos acham um escritor de livros baratos, Chuck Shurley, que assina como Carver Edlund e escreve a vida deles antes de ela acontecer. Ele é um profeta. Guarde esse nome.',mkScene({stage:7,cx:300,chars:[['chuck',160,1]],fx:['book']})),
     ]},
   {title:'A JAULA',season:'TEMPORADA 5',stages:[10,11],
     intro:'Lúcifer está livre. Para vencer o Diabo, os irmãos precisam dos anéis dos Quatro Cavaleiros: Guerra, Fome, Peste e Morte. Juntos, eles abrem a Jaula.',
     scenes:[
-      sc('O APOCALIPSE · 2009','Lúcifer anda pela Terra no corpo de Nick, um homem que perdeu a família. Por onde ele passa, a terra congela.',mkScene({stage:11,cx:300,chars:[['lucifer',160,1]],fx:['frost']})),
+      sc('O APOCALIPSE · 2009','Lúcifer anda pela Terra no corpo de Nick, um homem que perdeu a família. Por onde ele passa, a terra congela.',mkScene({stage:11,cx:300,chars:[['lucifer',100,1,'walk',12,0,6]],fx:['frost']})),
       sc('O DESTINO','Os anjos têm outro plano: Dean é a casca de Miguel, e Sam é a casca de Lúcifer. Os irmãos estão escritos para se matar numa luta final. Os dois se recusam a dizer sim.',mkScene({stage:11,cx:500,chars:[['dean',120,1],['sam',200,-1]],fx:['light']})),
-      sc('OS CAVALEIROS','Os quatro anéis dos Cavaleiros do Apocalipse, juntos, viram a chave da Jaula. O primeiro está com a Guerra, numa cidade das montanhas do Colorado.',mkScene({stage:10,cx:600,impala:[30,138],chars:[['dean',190,1],['sam',214,1]]})),
+      sc('OS CAVALEIROS','Os quatro anéis dos Cavaleiros do Apocalipse, juntos, viram a chave da Jaula. O primeiro está com a Guerra, numa cidade das montanhas do Colorado.',mkScene({stage:10,cx:600,impala:[-120,138,80,2],chars:[['dean',190,1],['sam',214,1]]})),
     ]},
   {title:'A MARCA DE CAIM',season:'TEMPORADAS 9 E 10',stages:[12],
     intro:'Abaddon, a última Cavaleira do Inferno, quer o trono de Crowley. Só uma arma mata um Cavaleiro do Inferno: a Primeira Lâmina. E só quem carrega a Marca de Caim consegue usá-la.',
@@ -310,7 +310,7 @@ ARCS.push(
     intro:'Para tirar a Marca de Dean, Rowena usou um feitiço. Funcionou, mas a Marca era uma tranca: ela segurava a Escuridão.',
     scenes:[
       sc('TEMPORADA 10','Sam cura o irmão com sangue humano consagrado, e Dean volta a ser gente. Para tirar a Marca de vez, os irmãos pedem ajuda a Rowena, a bruxa mãe de Crowley.',mkScene({stage:12,cx:200,chars:[['dean',130,1],['sam',190,-1]],fx:['spell']})),
-      sc('A ESCURIDÃO','O feitiço funciona, mas a Marca era uma tranca. Uma névoa negra se espalha pelo campo: a Escuridão está livre, e tem nome. Amara, a irmã de Deus.',mkScene({stage:13,cx:400,chars:[['amara',200,-1]],fx:['dark']})),
+      sc('A ESCURIDÃO','O feitiço funciona, mas a Marca era uma tranca. Uma névoa negra se espalha pelo campo: a Escuridão está livre, e tem nome. Amara, a irmã de Deus.',mkScene({stage:13,cx:400,chars:[['amara',270,-1,'walk',-12,0,6]],fx:['dark']})),
       sc('UM SIM','Para enfrentar Amara, Castiel diz sim a Lúcifer. O Diabo sai da Jaula usando o corpo do anjo.',mkScene({stage:13,cx:700,chars:[['lucicas',160,1]],fx:['hellfire']})),
     ]},
   {title:'O AUTOR',season:'TEMPORADA 15',stages:[15],
@@ -335,13 +335,20 @@ function mkScene(o){
       c.drawImage(L.sky,0,0);c.drawImage(L.far,-Math.round(cx*.2),0);c.drawImage(L.mid,-Math.round(cx*.5),0);c.drawImage(L.ground,-Math.round(cx),L.G0);}
     const fx=o.fx||[];
     if(fx.includes('wings')&&Math.floor(t*3)%3!==1){c.globalAlpha=.6;c.fillStyle='#000';for(const d of[-1,1])for(let i=0;i<40;i++){const a=i/40;c.fillRect(Math.round(200+d*(8+a*110)),Math.round(70+a*30-Math.sin(a*3)*30),Math.round(6+a*6),Math.round(30-a*20));}c.globalAlpha=1;}
-    if(o.impala)impala(c,o.impala[0],o.impala[1]);
-    for(const ch of o.chars||[]){const [id,x,face,st]=ch;const L=LOOKS[id];npc(L,x,184,face,st||'idle',t,{});}
+    if(o.impala)impala(c,Math.round(o.impala[0]+(o.impala[2]||0)*Math.min(t,o.impala[3]||99)),o.impala[1]);
+    if(fx.includes('cage')){c.globalAlpha=.7+.2*Math.sin(t*8);disc(c,170,206,30,'#fff2b0');disc(c,170,206,20,'#ffffff');c.globalAlpha=1;}
+    for(const ch of o.chars||[]){const [id,x,face,st,dx,dy]=ch;const L=LOOKS[id];npc(L,x+(dx||0)*Math.min(t,ch[6]||99),184+(dy||0)*t,face,st||'idle',t,{});}
     fxDraw(fx,t);
     vignette();
   };
 }
 function fxDraw(fx,t){
+  if(fx.includes('hounds')){if(Math.random()<.5){const x=rand(110,200),y=rand(150,190);for(let i=0;i<3;i++)cut.push({x:x+i*3,y,vx:0,vy:rand(20,40),life:.4,max:.4,col:'#c81a10',s:1});}
+    c.fillStyle='#ff3020';for(let i=0;i<3;i++){const x=200+i*40+Math.sin(t*3+i)*6|0;c.fillRect(x,176,2,1);c.fillRect(x+4,176,2,1);}}
+  if(fx.includes('seal')){c.globalAlpha=.8;c.strokeStyle='#c81a10';c.lineWidth=2;c.beginPath();c.ellipse(150,190,40*Math.min(1,t/1.5),12*Math.min(1,t/1.5),0,0,Math.PI*2);c.stroke();c.globalAlpha=1;}
+  if(fx.includes('rise')){const k=Math.min(1,t/1.2);c.globalAlpha=.6*k;c.fillStyle='#ffffff';c.fillRect(220-k*20|0,0,k*40|0,196);c.globalAlpha=1;}
+  if(fx.includes('blackeyes')){const k=Math.min(1,t/1.5);c.globalAlpha=1-k;c.fillStyle='#000';c.fillRect(0,0,SW,SH);c.globalAlpha=1;if(t>1.6){px(c,150,120,24,8,'#0c0808');}}
+  if(fx.includes('sunback')){c.globalAlpha=Math.min(.5,t*.15);c.fillStyle='#ffe8a0';c.fillRect(0,0,SW,SH);c.globalAlpha=1;}
   if(fx.includes('chains')){c.fillStyle='#4a3a3a';for(const x of[100,160,220])for(let y=0;y<130;y+=6)c.fillRect(x+(y/6%2?1:0),y,3,4);}
   if(fx.includes('hellfire')&&Math.random()<.9)for(let i=0;i<3;i++)cut.push({x:rand(0,SW),y:SH-8,vx:rand(-6,6),vy:rand(-50,-20),life:rand(.5,1),max:1,col:FIRE[(Math.random()*4)|0],s:2});
   if(fx.includes('grave')&&Math.random()<.5)cut.push({x:118+rand(-10,10),y:184,vx:rand(-30,30),vy:rand(-50,-20),life:.6,max:.6,col:'#4a3a22',s:2});
@@ -382,7 +389,7 @@ function choiceScreen(){
     <div class="row"><button class="btn" data-act="endA" type="button">ACEITAR O FINAL ESCRITO</button><button class="btn go" data-act="endB" type="button">RASGAR O ROTEIRO</button></div></div>`);
 }
 function creditsScreen(which){
-  mode='ending';showPad();try{localStorage.setItem('winchester-final',which);}catch(e){}
+  mode='ending';showPad();markEnding(which);
   show(`<div class="box"><p class="eyebrow">WINCHESTER · FIM</p><h2>${which==='B'?'A estrada continua':'Carry on'}</h2>
     <p class="txt">${which==='B'?'Você rasgou o roteiro e deu aos irmãos o final que escolheram.':'Você aceitou o final escrito. Quer ver o que acontece quando os irmãos rasgam o roteiro?'}</p>
     <p class="fine">Fan game gratuito e não oficial, inspirado em Supernatural, de Eric Kripke. Obrigado por jogar até o fim.</p>

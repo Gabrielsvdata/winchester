@@ -91,7 +91,7 @@ function updPlayer(dt,inp){
       else{const step=p.comboT>0&&p.lastHit?Math.min(2,p.combo):0;if(step===0&&!mvx)autoFace(p,H.reach[0]);startAtk(step);}
     }
     else if(B.shoot>0&&(coltReady()||p.shootCd<=0)){B.shoot=0;p.st='shoot';p.stT=0;p.shot=0;p.colt=coltReady();if(!p.colt)p.shootCd=H.shootCd;}
-    else if(B.magic>0&&(p.magic>0||H.free)&&!(H.mgCost&&p.hp<=H.mgCost)){B.magic=0;p.st='magic';p.stT=0;p.inv=1.4;p.mlvl=p.magic||2;p.magic=0;if(H.mgCost){p.hp-=H.mgCost;floatMsg('-'+H.mgCost,p.x,p.y);}p.mDone=false;p.face0=p.face;p.spinT=0;sfx('magic');dimT=['psy','smite','blood','neph'].includes(H.mg)?1.3:.5;
+    else if(B.magic>0&&(p.magic>0||H.free)&&!(H.mgCost&&p.hp<=H.mgCost)){B.magic=0;p.st='magic';p.stT=0;p.inv=1.4;p.mlvl=p.magic||2;p.magic=0;if(H.mgCost){p.hp-=H.mgCost;floatMsg('-'+H.mgCost,p.x,p.y);}if(Math.random()<.4)quip('magic');p.mDone=false;p.face0=p.face;p.spinT=0;sfx('magic');dimT=['psy','smite','blood','neph'].includes(H.mg)?1.3:.5;
       banner={l1:H.magicName,l2:p.mlvl>=4?'NÍVEL MÁXIMO':'NÍVEL '+p.mlvl,t:1.3,small:true};if(p.mlvl>=4){shake=Math.max(shake,6);flash=Math.max(flash,.3);}}
   }
   switch(p.st){
@@ -162,7 +162,7 @@ function updPlayer(dt,inp){
       if(p.stT>1.2){p.st='idle';p.mDone=false;}break;}
     case 'hurt':{p.x+=p.vx*dt;p.vx*=Math.pow(.01,dt);if(p.stT>.3)p.st='idle';break;}
     case 'air':{if(physicsAir(p,dt)){p.st='down';p.stT=0;}break;}
-    case 'down':{if(p.stT>.75){if(p.hp<=0){loseLife();}else{p.st='getup';p.stT=0;p.inv=.8;}}break;}
+    case 'down':{if(p.stT>.75){if(p.hp<=0){loseLife();}else{p.st='getup';p.stT=0;p.inv=1.2;}}break;}
     case 'getup':{if(p.stT>.3)p.st='idle';break;}
     case 'hold':{if(!boss||boss.st!=='held'){p.st='idle';p.inv=1;}break;}
     case 'esc':{p.face=Math.floor(p.stT/.06)%2?-p.face0:p.face0;
@@ -185,7 +185,7 @@ function loseLife(){
   else{mode='continue';contT=9.99;stopSong();showPad();}
 }
 let contT=0;
-function doContinue(){if(mode!=='continue')return;const p=P;p.lives=2;p.hp=p.maxHp;p.st='getup';p.stT=0;p.inv=2.5;p.magic=Math.max(p.magic,1);mode='play';showPad();playSong(boss?'boss':'stage');score=0;}
+function doContinue(){if(mode!=='continue')return;const p=P;p.lives=2;p.hp=p.maxHp;p.st='getup';p.stT=0;p.inv=2.5;p.magic=Math.max(p.magic,1);mode='play';showPad();playSong(boss?bossSong():stageSong());score=0;}
 
 /* ============ Inimigos ============ */
 const VAMPS=[
@@ -226,11 +226,11 @@ function spawnBoss(){
   }else{
     e=newEnt('enemy',cam.x+SW-60,182);e.type=k;e.isBoss=true;e.face=-1;e.atkCd=1.5;e.sum1=false;e.sum2=false;
     if(k==='luther'){e.hp=e.maxHp=420;e.look=LOOKS.luther;e.spd=40;e.outline='#1a0404';e.name='LUTHER';e.st='drop';e.z=90;e.vz=0;banner={l1:'LUTHER',l2:'O LÍDER DO NINHO',t:2.6};sfx('hiss');}
-    else if(k==='jake'){e.hp=e.maxHp=460;e.look=LOOKS.jake;e.spd=38;e.name='JAKE';e.st='idle';banner={l1:'JAKE',l2:'O SOLDADO COM FORÇA DE DEMÔNIO',t:2.6};sfx('heavy');}
+    else if(k==='jake'){e.hp=e.maxHp=400;e.look=LOOKS.jake;e.spd=38;e.name='JAKE';e.st='idle';banner={l1:'JAKE',l2:'O SOLDADO COM FORÇA DE DEMÔNIO',t:2.6};sfx('heavy');}
     else if(k==='meg'){e.hp=e.maxHp=440;e.look=LOOKS.meg;e.spd=36;e.outline='#0c0610';e.name='MEG';e.st='appear';e.alpha=0;banner={l1:'MEG',l2:'SERVA DO OLHO AMARELO',t:2.6};sfx('smoke');}
     else{e.hp=e.maxHp=1;e.ctrl=e.ctrlMax=480;e.look=LOOKS.azazel;e.spd=30;e.outline='#1a1200';e.name='AZAZEL';e.st='appear';e.alpha=0;banner={l1:'AZAZEL',l2:'O DEMÔNIO DE OLHOS AMARELOS',t:2.8};sfx('boss');}
   }
-  ents.push(e);boss=e;playSong('boss');shake=6;
+  ents.push(e);boss=e;playSong(bossSong());shake=6;if(BOSS_QUIPS[k])say(e,BOSS_QUIPS[k],3);
 }
 function updBoss(e,dt){return e.type==='woman'?updWoman(e,dt):updBossX(e,dt);}
 function bossSummon(e){
@@ -453,7 +453,7 @@ function updWoman(e,dt){
 function avaFalls(){banner={l1:'JAKE ACABA COM AVA',l2:'O CONTROLE DOS ACHERI SE QUEBRA',t:2.6,small:true};sfx('heavy');
   for(const x of ents)if(!x.dead&&x.type==='ac'&&!['dead','air','down'].includes(x.st)){x.hp=0;knock(x,sgn(x.x-P.x)||1,.6);}}
 function summon(){banner={l1:'ELA CHAMA AS VÍTIMAS',l2:'',t:1.6,small:true};sfx('scream');spawnEnemy('v',cam.x+20,rand(LT,LB));spawnEnemy('v',cam.x+SW-20,rand(LT,LB));}
-function bossDie(b){if(BOSSDEF[b.type]&&BOSSDEF[b.type].onDie)BOSSDEF[b.type].onDie(b);if(b.type==='jake')banner={l1:'JAKE CAI',l2:'MAS A NOITE NÃO ACABOU',t:2.6,small:true};b.st='dying';b.stT=0;b.vx=0;stopSong();sfx('die');flash=.8;shake=10;ents.forEach(e=>{if(e!==b&&!e.dead){e.st='dead';e.stT=0;}});projs=[];}
+function bossDie(b){P.quipWin=1.6;if(BOSSDEF[b.type]&&BOSSDEF[b.type].onDie)BOSSDEF[b.type].onDie(b);if(b.type==='jake')banner={l1:'JAKE CAI',l2:'MAS A NOITE NÃO ACABOU',t:2.6,small:true};b.st='dying';b.stT=0;b.vx=0;stopSong();sfx('die');flash=.8;shake=10;ents.forEach(e=>{if(e!==b&&!e.dead){e.st='dead';e.stT=0;}});projs=[];}
 
 /* ============ Ondas e câmera ============ */
 function updateZones(dt){

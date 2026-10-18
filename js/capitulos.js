@@ -76,7 +76,8 @@ function startGame(){
   PROPS.forEach((p,i)=>{const e=newEnt('prop',p.x,p.y);e.hp=1;e.drop=C.drops[i]||p.drop;props.push(e);});
   banner={l1:'CAPÍTULO '+arcOf(chapter),l2:(ARCS[arcOf(chapter)].stages.length>1?'FASE '+phaseOf(chapter)+': ':'')+C.title,t:3};
   if(chapter===1&&!tutDone())startTut();
-  mode='play';hideScreen();showPad();playSong('stage');
+  bubbles=[];P.quipT=3.4;
+  mode='play';hideScreen();showPad();playSong(stageSong());
 }
 
 /* ============ Capítulos ============ */
@@ -169,7 +170,8 @@ function chaptersScreen(){
   const b=[];
   for(let a=1;a<ARCS.length;a++){const A=ARCS[a],open=A.stages.filter(i=>i<=progress);if(!open.length)continue;
     b.push(`<p class="eyebrow">CAPITULO ${a} · ${A.season} · ${pf(A.title)}</p>`);
-    for(const i of open)b.push(`<button class="btn${i===progress?' go':''}" data-act="chap" data-n="${i}" type="button">${A.stages.length>1?'FASE '+phaseOf(i)+': ':''}${pf(CHAPTERS[i].title)}</button>`);}
+    for(const i of open)b.push(`<button class="btn${i===progress?' go':''}" data-act="chap" data-n="${i}" type="button">${A.stages.length>1?'FASE '+phaseOf(i)+': ':''}${pf(CHAPTERS[i].title)}${records[i]?' · '+String(records[i]).padStart(6,'0'):''}</button>`);}
+  b.push(`<p class="fine">Finais vistos: ${endingsCount()} de 2.</p>`);
   show(`<div class="box"><p class="eyebrow">CAPITULOS E FASES LIBERADOS</p><div class="row" style="flex-direction:column;align-items:stretch">${b.join('')}</div><div class="row"><button class="btn" data-act="title" type="button">◀ VOLTAR</button></div></div>`);
 }
 
