@@ -18,11 +18,17 @@ function shade(c,k){const key=c+k;if(SHC[key])return SHC[key];if(typeof c!=='str
   const f=v=>Math.max(0,Math.min(255,Math.round(k>0?v+(255-v)*k:v*(1+k))));
   return SHC[key]='#'+[1,3,5].map(i=>f(parseInt(c.slice(i,i+2),16)).toString(16).padStart(2,'0')).join('');}
 // membro com volume: borda clara do lado da luz e borda escura do outro
-function slimb(g,x0,y0,x1,y1,w,col){limb(g,x0,y0,x1,y1,w,col);if(w<3)return;
-  const dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy)||1;let nx=-dy/l,ny=dx/l;if(nx*.55+ny*-.83<0){nx=-nx;ny=-ny;}
-  const o=w/2-.5,n=Math.max(1,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))));
-  g.fillStyle=shade(col,.3);for(let i=0;i<=n;i++)g.fillRect(Math.round(x0+dx*i/n+nx*o-.5),Math.round(y0+dy*i/n+ny*o-.5),1,1);
-  g.fillStyle=shade(col,-.35);for(let i=0;i<=n;i++)g.fillRect(Math.round(x0+dx*i/n-nx*o-.5),Math.round(y0+dy*i/n-ny*o-.5),1,1);}
+// w1: largura no fim (afunila coxa para canela, braço para antebraço)
+function slimb(g,x0,y0,x1,y1,w,col,w1){if(w1==null)w1=w;
+  const dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy)||1,n=Math.max(1,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))));
+  let nx=-dy/l,ny=dx/l;if(nx*.55+ny*-.83<0){nx=-nx;ny=-ny;}
+  const lt=shade(col,.3),lt2=shade(col,.12),dk=shade(col,-.18),dk2=shade(col,-.42);
+  for(let i=0;i<=n;i++){const k=i/n,ww=w+(w1-w)*k,cx=x0+dx*k,cy=y0+dy*k,o=ww/2-.5;
+    g.fillStyle=col;g.fillRect(Math.round(cx-ww/2),Math.round(cy-ww/2),Math.round(ww),Math.round(ww));
+    if(ww<3)continue;
+    if(ww>=5){g.fillStyle=dk;g.fillRect(Math.round(cx-nx*(o-1)-.5),Math.round(cy-ny*(o-1)-.5),1,1);g.fillStyle=lt2;g.fillRect(Math.round(cx+nx*(o-1)-.5),Math.round(cy+ny*(o-1)-.5),1,1);}
+    g.fillStyle=lt;g.fillRect(Math.round(cx+nx*o-.5),Math.round(cy+ny*o-.5),1,1);
+    g.fillStyle=dk2;g.fillRect(Math.round(cx-nx*o-.5),Math.round(cy-ny*o-.5),1,1);}}
 function disc(g,cx,cy,r,col){g.fillStyle=col;for(let y=-r;y<=r;y++){const hw=Math.round(Math.sqrt(r*r-y*y));g.fillRect(Math.round(cx-hw),Math.round(cy+y),hw*2+1,1);}}
 function icon(g,map,pal,x,y){for(let r=0;r<map.length;r++)for(let k=0;k<map[r].length;k++){const ch=map[r][k];if(ch!=='.'){g.fillStyle=pal[ch];g.fillRect(x+k,y+r,1,1);}}}
 const ACC={'Á':'A´','À':'A`','Â':'A^','Ã':'A~','É':'E´','Ê':'E^','Í':'I´','Ó':'O´','Ô':'O^','Õ':'O~','Ú':'U´','Ç':'C,'};
@@ -70,20 +76,24 @@ const GHOSTS=[
 ];
 const SCREAMER={skin:'#c6d8e4',hair:'#141420',style:'woman',jacket:'#7a8ca4',jacketD:'#56647a',shirt:'#a8b8cc',dress:'#8a9cb4',dressD:'#5a6a82',skirt:true,eye:'#000',boots:'#000',tall:1};
 
-const PUP={hx:0,hy:0};
+const PUP={hx:0,hy:0,sq:1};
 function drawPuppet(g,L,P){
   g.clearRect(0,0,BUF,BUF);
   const T=L.tall||0,th=10+T*.4,sh=10+T*.4,tor=17+T*.5,ua=8,fa=8;
   const hipX=OX,hipY=OY-th-sh+(P.crouch||0);
   const neckX=hipX+(P.lean||0),neckY=hipY-tor;
-  const leg=(a,col)=>{const kx=hipX+Math.sin(a[0])*th,ky=hipY+Math.cos(a[0])*th,s=a[0]-a[1],fx=kx+Math.sin(s)*sh,fy=ky+Math.cos(s)*sh;slimb(g,hipX,hipY,kx,ky,4,col);slimb(g,kx,ky,fx,fy,4,col);px(g,fx-1,fy-1,5,3,L.boots);};
-  const arm=(a,col)=>{const sx=neckX,sy=neckY+3,ex=sx+Math.sin(a[0])*ua,ey=sy+Math.cos(a[0])*ua,s=a[0]+a[1],hx=ex+Math.sin(s)*fa,hy=ey+Math.cos(s)*fa;slimb(g,sx,sy,ex,ey,4,col);slimb(g,ex,ey,hx,hy,3,col);px(g,hx-1,hy-1,3,3,L.skin);return{hx,hy,s};};
+  PUP.sq=P.sq||1;
+  // coxa mais grossa que a canela, braço mais grosso que o antebraço, joelho e cotovelo marcados
+  const leg=(a,col)=>{const kx=hipX+Math.sin(a[0])*th,ky=hipY+Math.cos(a[0])*th,s=a[0]-a[1],fx=kx+Math.sin(s)*sh,fy=ky+Math.cos(s)*sh;slimb(g,hipX,hipY,kx,ky,5,col,4);slimb(g,kx,ky,fx,fy,4,col,3);px(g,kx-1,ky,2,1,shade(col,-.3));px(g,fx-1,fy-1,5,3,L.boots);px(g,fx-1,fy-1,5,1,shade(L.boots,.25));px(g,fx+2,fy+1,2,1,shade(L.boots,-.4));};
+  const arm=(a,col)=>{const sx=neckX,sy=neckY+3,ex=sx+Math.sin(a[0])*ua,ey=sy+Math.cos(a[0])*ua,s=a[0]+a[1],hx=ex+Math.sin(s)*fa,hy=ey+Math.cos(s)*fa;slimb(g,sx,sy,ex,ey,5,col,4);slimb(g,ex,ey,hx,hy,3,col,3);px(g,ex-1,ey,2,1,shade(col,-.3));px(g,hx-1,hy-1,3,3,L.skin);px(g,hx-1,hy+1,3,1,shade(L.skin,-.3));px(g,hx,hy-1,1,1,shade(L.skin,.25));return{hx,hy,s};};
   if(L.skirt){
     const flow=P.flow||0;
     for(let y=Math.round(hipY-3);y<=OY;y++){const k=(y-hipY+3)/(OY-hipY+3),w=Math.round(5+k*8+Math.sin(y*.5+flow)*1.2),x=hipX+(P.lean||0)*(1-k)*.4;px(g,x-w,y,w,1,L.dressD);px(g,x,y,w+1,1,L.dress);}
   }else leg(P.bl,L.pantsD);
   arm(P.ba,L.jacketD);
   slimb(g,hipX,hipY-2,neckX,neckY+3,9,L.jacket);
+  limb(g,hipX+3,hipY-4,neckX+3,neckY+5,1,shade(L.jacket,.2));limb(g,hipX-3,hipY-3,neckX-3,neckY+5,1,shade(L.jacket,-.25));
+  px(g,neckX-5,neckY+1,11,2,shade(L.jacket,.1));px(g,neckX-5,neckY+3,11,1,shade(L.jacket,-.2));
   if(L.plaid){for(let y=Math.round(neckY+5);y<hipY-1;y+=3){const k=(hipY-y)/(hipY-neckY),x=hipX+(neckX-hipX)*k;px(g,x-4,y,9,1,L.plaid);}for(let d=-3;d<=3;d+=3)limb(g,hipX+d,hipY-3,neckX+d,neckY+4,1,L.plaid);}
   limb(g,hipX+2,hipY-3,neckX+2,neckY+5,3,L.shirt);
   if(L.tie)limb(g,hipX+2,hipY-6,neckX+2,neckY+5,1,L.tie);
@@ -102,6 +112,8 @@ function drawPuppet(g,L,P){
   else if(L.style==='messy'){g.fillRect(hx-4,hy-5,9,3);g.fillRect(hx-3,hy-6,2,1);g.fillRect(hx+1,hy-6,2,1);g.fillRect(hx-4,hy-3,2,2);}
   else if(L.style==='cap'){g.fillRect(hx-4,hy-3,2,3);g.fillStyle=L.cap;g.fillRect(hx-5,hy-6,10,3);g.fillRect(hx+2,hy-4,5,1);}
   if(L.style!=='cap')px(g,hx-1,hy-5,4,1,shade(L.hair,.35));
+  px(g,hx-2,hy-1,1,2,shade(L.skin,-.25));
+  if(P.angry){px(g,hx+1,hy-3,1,1,shade(L.hair,-.3));px(g,hx+2,hy-2,2,1,shade(L.hair,-.3));}
   if(P.mouth){px(g,hx+1,hy+1,3,3,'#000');if(L.fangs){px(g,hx+1,hy+1,1,1,'#fff');px(g,hx+3,hy+1,1,1,'#fff');}}
   if(L.beard){px(g,hx-1,hy+2,5,2,L.beard);px(g,hx-3,hy,2,3,L.beard);}
   px(g,hx+1,hy-3,3,1,shade(L.hair,-.15));px(g,hx+1,hy+2,2,1,shade(L.skin,-.35));
@@ -120,7 +132,7 @@ function silhouette(g,col){g.globalCompositeOperation='source-over';g.clearRect(
 function blit(x,y,face,o){
   silhouette(sg,o.outline||'#07060d');
   c.save();c.globalAlpha=o.alpha==null?1:o.alpha;c.translate(Math.round(x),Math.round(y));
-  if(face<0)c.scale(-1,1);if(o.rot)c.rotate(o.rot);
+  if(face<0)c.scale(-1,1);if(o.rot)c.rotate(o.rot);if(PUP.sq!==1)c.scale(1+(1-PUP.sq)*.7,PUP.sq);
   for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1]])c.drawImage(sil,-OX+dx,-OY+dy);
   if(o.glitch){for(let y0=0;y0<BUF;y0+=4){const off=Math.random()<o.glitch?Math.round(rand(-4,4)):0;c.drawImage(buf,0,y0,BUF,4,-OX+off,-OY+y0,BUF,4);}}
   else c.drawImage(buf,-OX,-OY);
@@ -134,15 +146,18 @@ function poseFor(e){
   const P={lean:0,crouch:0,fl:[.12,.1],bl:[-.12,.1],fa:[.35,.6],ba:[-.2,.4]};
   const walk=(amp,lean)=>{const ph=Math.sin(e.ph);P.fl=[ph*amp,Math.max(0,-ph)*amp*1.5];P.bl=[-ph*amp,Math.max(0,ph)*amp*1.5];P.fa=[-ph*amp+.35,.6+amp*.4];P.ba=[ph*amp,.4];P.lean=lean;P.crouch=Math.abs(ph)>.7?0:1;};
   switch(s){
-    case 'idle':case 'float':P.crouch=Math.sin(t*3)>0?1:0;break;
+    case 'idle':case 'float':{const br=Math.sin(t*3);P.crouch=br>0?1:0;P.fa=[.35+br*.06,.6];P.ba=[-.2-br*.05,.4];break;}
     case 'walk':walk(.55,0);break;
     case 'run':walk(.95,3);break;
     case 'atk':{const q=k/e.dur;P.fl=[.35,.1];P.bl=[-.35,.15];
-      if(e.step===0){P.fa=q<.35?[-.7,1.1]:[1.55,0];P.lean=q<.35?-1:2;}
-      else if(e.step===1){P.fa=q<.35?[2.9,.3]:[.85,.15];P.lean=q<.35?-1:2;}
-      else{P.fl=q<.3?[.7,1.5]:[1.6,0];P.bl=[-.2,.1];P.lean=-2;P.fa=[.6,.6];P.ba=[-.7,.5];}
+      P.angry=true;
+      // antecipação (recua), golpe (estica e passa do ponto) e recuperação
+      if(e.step===0){P.fa=q<.3?[-.9,1.2]:q<.7?[1.65,0]:[1.3,.2];P.ba=q<.3?[.3,.6]:[-.6,.4];P.lean=q<.3?-2:q<.7?3:1;P.crouch=q<.3?1:0;P.sq=q<.3?.97:q<.5?1.03:1;}
+      else if(e.step===1){P.fa=q<.3?[3.0,.3]:q<.7?[.75,.1]:[1.0,.3];P.ba=q<.3?[-.4,.5]:[-.8,.3];P.lean=q<.3?-2:q<.7?3:1;P.crouch=q<.3?2:0;P.sq=q<.3?.96:q<.5?1.04:1;}
+      else{P.fl=q<.3?[.8,1.6]:q<.7?[1.7,0]:[1.2,.4];P.bl=[-.25,.1];P.lean=q<.3?-3:q<.7?-4:-2;P.fa=q<.3?[.9,.6]:[.4,.5];P.ba=[-.9,.5];P.crouch=q<.3?2:0;P.sq=q<.3?.95:q<.5?1.04:1;}
       break;}
-    case 'jump':if(e.jatk){P.fl=[1.5,0];P.bl=[-.4,1.4];P.fa=[.3,.5];P.lean=-1;}else{P.fl=[.7,1.3];P.bl=[-.3,1];P.fa=[1.9,.6];P.ba=[-1.2,.6];}break;
+    case 'jump':if(e.jatk){P.fl=[1.5,0];P.bl=[-.4,1.4];P.fa=[.3,.5];P.lean=-1;}else{P.fl=[.7,1.3];P.bl=[-.3,1];P.fa=[1.9,.6];P.ba=[-1.2,.6];}
+      if(k<.08){P.crouch=3;P.sq=.9;}else if(e.vz>60)P.sq=1.07;else if(e.vz<-60)P.sq=1.03;break;
     case 'runatk':P.lean=4;P.fa=[1.45,0];P.ba=[1.2,.2];P.fl=[.6,.4];P.bl=[-.8,.6];break;
     case 'shoot':P.fa=[1.57,0];P.ba=[1.4,.2];P.gun=true;P.colt=!!e.colt;P.lean=(k>.12&&k<.22)?-2:0;if(e.kind==='player'&&heroFor(hero).shot==='blink'&&!e.colt){P.gun=false;P.fa=[1.4,0];}break;
     case 'magic':
@@ -150,7 +165,7 @@ function poseFor(e){
       else if(e.kind==='player'&&heroFor(hero).mg==='spin'){P.fa=[1.57,0];P.ba=[1.57,0];}
       else{P.fa=[3.05,0];P.ba=[2.8,0];P.weapon=false;P.crouch=k<.3?2:0;}
       break;
-    case 'hurt':P.lean=-3;P.fa=[-.9,.7];P.ba=[-1.3,.4];P.fl=[.3,.2];P.bl=[-.3,.2];break;
+    case 'hurt':P.lean=k<.1?-5:-3;P.fa=[-.9,.7];P.ba=[-1.3,.4];P.fl=[.3,.2];P.bl=[-.3,.2];P.mouth=k<.2;P.sq=k<.08?.94:1;break;
     case 'windup':P.fa=[-.9,.9];P.ba=[-.5,.6];P.lean=-2;P.claw=true;P.weapon=false;break;
     case 'eatk':P.fa=[1.5,.05];P.ba=[1.2,.3];P.lean=3;P.claw=true;P.weapon=false;break;
     case 'recover':P.fa=[.9,.4];P.lean=1;P.weapon=false;break;
@@ -160,8 +175,9 @@ function poseFor(e){
     case 'cwind':P.fa=[1.3,.2];P.ba=[1.1,.3];P.lean=-3;P.claw=true;break;
     case 'charge':P.fa=[1.6,0];P.ba=[1.4,.1];P.lean=5;P.claw=true;P.mouth=true;break;
     case 'bwind':P.fa=[2.6,.8];P.lean=-2;P.claw=true;break;
-    case 'air':case 'down':case 'dead':case 'dying':P.fl=[.1,0];P.bl=[-.1,0];P.fa=[2.6,.3];P.ba=[2.9,.2];P.weapon=e.kind==='player'?true:false;break;
-    case 'getup':P.crouch=3;P.fa=[.8,.8];break;
+    case 'air':P.fl=[.5,.6];P.bl=[-.4,.4];P.fa=[2.4,.5];P.ba=[2.9,.3];P.mouth=true;P.weapon=e.kind==='player'?true:false;break;
+    case 'down':case 'dead':case 'dying':P.fl=[.1,0];P.bl=[-.1,0];P.fa=[2.6,.3];P.ba=[2.9,.2];P.weapon=e.kind==='player'?true:false;if(s==='down'&&k<.12)P.sq=.85;break;
+    case 'getup':{const q=Math.min(1,k/.3);P.crouch=q<.4?6:q<.75?4:2;P.lean=q<.4?3:1;P.fa=[.9,.8];P.ba=[.4,.9];P.fl=[.6,1.1];P.bl=[-.5,.3];break;}
     case 'lwind':P.fa=[1.3,.2];P.ba=[1.1,.3];P.lean=-3;P.claw=true;P.mouth=true;break;
     case 'lunge':P.fa=[1.6,0];P.ba=[1.4,.1];P.lean=5;P.claw=true;P.mouth=true;P.fl=[.8,.3];P.bl=[-.9,.5];break;
     case 'throw':P.fa=k<.45?[2.8,.5]:[1.4,0];P.ba=[-.4,.5];P.lean=k<.45?-2:3;break;
@@ -175,6 +191,11 @@ function poseFor(e){
   }
   if(e.kind!=='player')P.weapon=false;
   P.flow=t*6;
+  // transição suave: mistura com a pose do quadro anterior, menos no instante do golpe
+  if(e._pp&&!e.noBlend){const snap=(s==='atk'&&k/e.dur>.3&&k/e.dur<.5)||s==='hurt'||s==='air';const f=snap?.85:.5,o=e._pp;
+    for(const key of['fl','bl','fa','ba'])if(o[key])P[key]=[o[key][0]+(P[key][0]-o[key][0])*f,o[key][1]+(P[key][1]-o[key][1])*f];
+    P.lean=o.lean+(P.lean-o.lean)*f;}
+  if(typeof e==='object')e._pp={fl:P.fl,bl:P.bl,fa:P.fa,ba:P.ba,lean:P.lean};
   return P;
 }
 

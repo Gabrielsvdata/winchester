@@ -25,6 +25,8 @@ function swingArc(p,r,big,tag,down){addFx({k:'arc',x:p.x,y:p.y-p.z,face:p.face,r
 function impactFx(b,tag,dir){
   const x=b.x,y=b.y,z=b.z+30,P0=(n,col,sp,up,grav,size)=>{for(let i=0;i<n;i++)parts.push({x:x+rand(-4,4),y:y+rand(-2,2),z:z+rand(-6,6),vx:-dir*rand(10,sp)*(Math.random()<.3?-1:1),vy:0,vz:rand(up[0],up[1]),life:.45,max:.45,col:Array.isArray(col)?col[(Math.random()*col.length)|0]:col,size:size||1,grav:grav?1:0});};
   const cl=CLS[b.type];
+  // faísca em estrela no ponto do impacto
+  addFx({k:'star',x:x-dir*6,y:y-z,dur:.18,r:tag==='smite'||tag==='holy'?12:9,col:ARCCOL[tag]||'#ffe08a',spin:rand(0,Math.PI)});
   if(tag==='salt')P0(10,['#ffffff','#e8e8f0'],70,[-20,60]);
   else if(tag==='iron')P0(7,['#ffb040','#ffe080'],90,[20,90],true);
   else if(tag==='holy'){if(cl==='demon'){P0(8,['#e8e8e8','#b8b8c0'],20,[30,70],false,2);if(Math.random()<.4)floatMsg('TSSS',x,y);}else P0(6,'#9fd0ff',50,[10,60],true);}
@@ -72,6 +74,7 @@ function drawFx2(cx,back){
     const k=f.t/f.dur,a=Math.max(0,1-k),x=Math.round((f.follow?P.x:f.x)-cx),y=Math.round((f.follow?P.y-P.z:f.y));
     if(f.k==='arc'){c.save();c.translate(x+f.face*4,y-28);if(f.face<0)c.scale(-1,1);
       const s0=f.down?-1.3:-1.1,s1=f.down?1.2:.6,e1=s0+(s1-s0)*Math.min(1,k*2.2);
+      c.globalAlpha=a*.35;c.strokeStyle=f.col;c.lineWidth=f.big?8:5;c.beginPath();c.arc(0,0,f.r,s0,e1);c.stroke();
       c.globalAlpha=a*.9;c.strokeStyle=f.col;c.lineWidth=f.big?4:3;c.beginPath();c.arc(0,0,f.r,s0,e1);c.stroke();
       c.globalAlpha=a;c.strokeStyle='#ffffff';c.lineWidth=1;c.beginPath();c.arc(0,0,f.r-2,s0,e1);c.stroke();c.restore();}
     else if(f.k==='wings'){const open=Math.min(1,k*3.5),flick=Math.floor(f.t*12)%5!==2;if(!flick)continue;
